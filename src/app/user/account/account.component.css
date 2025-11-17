@@ -1,0 +1,236 @@
+:host {
+  display: block;
+}
+
+.account-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 40%, #ffffff 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  backdrop-filter: blur(16px);
+}
+
+.site-header__inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.site-logo {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  font-size: 1.35rem;
+  background: linear-gradient(120deg, #0ea5e9, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  flex: 1;
+}
+
+.site-nav__link {
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  position: relative;
+  padding: 0.35rem 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link:hover {
+  color: #0ea5e9;
+}
+
+.site-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-actions__link,
+.account-card__logout {
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.site-actions__link:hover,
+.account-card__logout:hover {
+  background: rgba(14, 165, 233, 0.08);
+}
+
+.site-actions__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.35rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px -10px rgba(14, 165, 233, 0.6);
+}
+
+.site-actions__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 30px -12px rgba(14, 165, 233, 0.6);
+}
+
+.account-main {
+  flex: 1;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.account-card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 25px 45px -35px rgba(15, 23, 42, 0.35);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.account-card__header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.account-card__avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+}
+
+.account-card__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  color: #6366f1;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.account-card__email {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.account-card__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.account-detail {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  background: #f8fafc;
+}
+
+.account-detail__label {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 0.35rem;
+}
+
+.account-detail__value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.account-card--empty {
+  text-align: center;
+  gap: 1rem;
+}
+
+.account-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  color: #475569;
+}
+
+.account-loading__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 4px solid rgba(148, 163, 184, 0.3);
+  border-top-color: #6366f1;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .site-header__inner {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .site-nav {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .account-card {
+    padding: 1.5rem;
+  }
+
+  .account-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-card__avatar {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+

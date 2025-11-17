@@ -1,0 +1,231 @@
+<div class="settings-page" [ngClass]="{'settings-page--embedded': mode === 'embedded'}">
+  <aside class="settings-sidebar" *ngIf="mode === 'standalone'">
+    <div class="settings-sidebar__brand">
+      <div class="settings-sidebar__icon">
+        <i data-feather="sliders"></i>
+      </div>
+      <div>
+        <span class="settings-sidebar__label">AdminPanel</span>
+        <small>Zone de configuration</small>
+      </div>
+    </div>
+
+    <nav class="settings-sidebar__nav">
+      <a
+        *ngFor="let link of navLinks"
+        [routerLink]="link.route"
+        [routerLinkActive]="['settings-sidebar__nav-link--active']"
+        [routerLinkActiveOptions]="{ exact: link.exact }"
+        class="settings-sidebar__nav-link"
+      >
+        <i [attr.data-feather]="link.icon"></i>
+        <span>{{ link.label }}</span>
+      </a>
+    </nav>
+
+    <div class="settings-sidebar__help">
+      <h3>Besoin d'aide ?</h3>
+      <p>Consultez la documentation interne ou contactez le support EDIG.</p>
+      <button type="button" class="ghost-button">Contacter le support</button>
+    </div>
+  </aside>
+
+  <main class="settings-main" [ngClass]="{'settings-main--embedded': mode === 'embedded'}">
+    <header class="settings-header">
+      <div>
+        <h1>Paramètres</h1>
+        <p>Personnalisez votre espace administrateur. Les modifications n'affectent que votre compte.</p>
+      </div>
+      <div class="settings-header__meta">
+        <i data-feather="shield"></i>
+        <span>Profil Administrateur</span>
+      </div>
+    </header>
+
+    <section *ngIf="feedback" class="settings-feedback" [ngClass]="'settings-feedback--' + feedback.type">
+      <i data-feather="check-circle" *ngIf="feedback.type === 'success'"></i>
+      <i data-feather="info" *ngIf="feedback.type === 'info'"></i>
+      <i data-feather="alert-triangle" *ngIf="feedback.type === 'error'"></i>
+      <span>{{ feedback.text }}</span>
+    </section>
+
+    <section class="settings-section">
+      <article class="settings-card">
+        <div class="settings-card__header">
+          <div>
+            <h2>Profil</h2>
+            <p>Mettre à jour vos informations de contact visibles par les autres administrateurs.</p>
+          </div>
+          <button type="button" class="primary-button" (click)="saveProfile()">
+            <i data-feather="save"></i>
+            <span>Enregistrer</span>
+          </button>
+        </div>
+
+        <form class="settings-form">
+          <label class="settings-field">
+            <span>Nom complet</span>
+            <input type="text" [(ngModel)]="profileSettings.fullName" name="profileFullName" placeholder="Jane Doe" />
+          </label>
+          <label class="settings-field">
+            <span>Email</span>
+            <input type="email" [(ngModel)]="profileSettings.email" name="profileEmail" placeholder="admin@edig.com" />
+          </label>
+          <label class="settings-field">
+            <span>Organisation</span>
+            <input type="text" [(ngModel)]="profileSettings.organisation" name="profileOrganisation" placeholder="ÉDIG" />
+          </label>
+          <label class="settings-field">
+            <span>Téléphone</span>
+            <input type="tel" [(ngModel)]="profileSettings.phone" name="profilePhone" placeholder="(+237) 6 00 00 00 00" />
+          </label>
+        </form>
+      </article>
+
+      <article class="settings-card">
+        <div class="settings-card__header">
+          <div>
+            <h2>Sécurité</h2>
+            <p>Renforcez la protection de votre compte administrateur.</p>
+          </div>
+          <button type="button" class="primary-button" (click)="saveSecurity()">
+            <i data-feather="shield"></i>
+            <span>Mettre à jour</span>
+          </button>
+        </div>
+
+        <div class="settings-options">
+          <label class="settings-toggle">
+            <input type="checkbox" [(ngModel)]="securitySettings.twoFactor" name="securityTwoFactor" />
+            <span>
+              <strong>Activer l’authentification à deux facteurs</strong>
+              <small>Ajoutez une couche supplémentaire via OTP.</small>
+            </span>
+          </label>
+
+          <label class="settings-option">
+            <div>
+              <strong>Déconnexion automatique</strong>
+              <small>Durée d’inactivité avant déconnexion (minutes).</small>
+            </div>
+            <input type="number" min="5" max="240" [(ngModel)]="securitySettings.autoLogoutDelay" name="securityAutoLogout" />
+          </label>
+
+          <label class="settings-toggle">
+            <input type="checkbox" [(ngModel)]="securitySettings.emailAlerts" name="securityEmailAlerts" />
+            <span>
+              <strong>Recevoir les alertes de sécurité par email</strong>
+              <small>Notifications immédiates lors d’une connexion suspecte.</small>
+            </span>
+          </label>
+        </div>
+      </article>
+    </section>
+
+    <section class="settings-section">
+      <article class="settings-card">
+        <div class="settings-card__header">
+          <div>
+            <h2>Notifications</h2>
+            <p>Choisissez les informations que vous souhaitez recevoir.</p>
+          </div>
+          <button type="button" class="primary-button" (click)="saveNotifications()">
+            <i data-feather="bell"></i>
+            <span>Appliquer</span>
+          </button>
+        </div>
+
+        <div class="settings-options settings-options--grid">
+          <label class="settings-toggle">
+            <input type="checkbox" [(ngModel)]="notificationSettings.productUpdates" name="notifUpdates" />
+            <span>
+              <strong>Actualités produit</strong>
+              <small>Nouveautés EDIG et nouvelles fonctionnalités.</small>
+            </span>
+          </label>
+
+          <label class="settings-toggle">
+            <input type="checkbox" [(ngModel)]="notificationSettings.securityAlerts" name="notifSecurity" />
+            <span>
+              <strong>Alertes de sécurité</strong>
+              <small>Recommandé pour tous les administrateurs.</small>
+            </span>
+          </label>
+
+          <label class="settings-toggle">
+            <input type="checkbox" [(ngModel)]="notificationSettings.weeklyDigest" name="notifDigest" />
+            <span>
+              <strong>Rapport hebdomadaire</strong>
+              <small>Résumé des actions et statistiques clés.</small>
+            </span>
+          </label>
+        </div>
+      </article>
+
+      <article class="settings-card">
+        <div class="settings-card__header">
+          <div>
+            <h2>Apparence</h2>
+            <p>Affinez l’affichage de l’interface selon vos préférences.</p>
+          </div>
+          <div class="settings-card__actions">
+            <button type="button" class="ghost-button" (click)="resetPreferences()">Réinitialiser</button>
+            <button type="button" class="primary-button" (click)="saveAppearance()">
+              <i data-feather="monitor"></i>
+              <span>Sauvegarder</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-options">
+          <div class="settings-radio-group">
+            <p>Thème</p>
+            <label>
+              <input type="radio" name="appearanceTheme" value="light" [(ngModel)]="appearanceSettings.theme" />
+              <span>Clair</span>
+            </label>
+            <label>
+              <input type="radio" name="appearanceTheme" value="dark" [(ngModel)]="appearanceSettings.theme" />
+              <span>Sombre</span>
+            </label>
+            <label>
+              <input type="radio" name="appearanceTheme" value="system" [(ngModel)]="appearanceSettings.theme" />
+              <span>Système</span>
+            </label>
+          </div>
+
+          <div class="settings-radio-group">
+            <p>Densité</p>
+            <label>
+              <input type="radio" name="appearanceDensity" value="comfortable" [(ngModel)]="appearanceSettings.density" />
+              <span>Confort</span>
+            </label>
+            <label>
+              <input type="radio" name="appearanceDensity" value="compact" [(ngModel)]="appearanceSettings.density" />
+              <span>Compact</span>
+            </label>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="settings-section settings-section--support">
+      <article class="settings-card settings-card--support">
+        <div>
+          <h2>Support & documentation</h2>
+          <p>Retrouvez les procédures internes, guides d’onboarding et résolution d’incidents.</p>
+        </div>
+        <div class="settings-card__actions">
+          <button type="button" class="ghost-button">
+            <i data-feather="book"></i>
+            <span>Guide d’utilisation</span>
+          </button>
+          <button type="button" class="ghost-button">
+            <i data-feather="life-buoy"></i>
+            <span>Centre d’aide</span>
+          </button>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>

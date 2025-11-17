@@ -1,0 +1,160 @@
+<div class="add-book-page">
+  <section class="add-book-hero">
+    <div class="add-book-hero__content">
+      <span class="add-book-hero__badge">Administration</span>
+      <h1 class="add-book-hero__title">
+        <i data-feather="book" class="add-book-hero__icon"></i>
+        {{ isEditMode ? 'Modifier un manuel' : 'Ajouter un manuel scolaire' }}
+      </h1>
+      <p class="add-book-hero__subtitle">Complétez ou mettez à jour les informations de vos ouvrages depuis une interface cohérente avec le tableau de bord.</p>
+    </div>
+    <div class="add-book-hero__actions">
+      <button *ngIf="showBackButton" type="button" class="add-book-hero__back" (click)="onCancel()">
+        <i data-feather="arrow-left"></i>
+        Retour
+      </button>
+      <div class="add-book-hero__stat">
+        <span class="add-book-hero__stat-label">État</span>
+        <span class="add-book-hero__stat-value">{{ isEditMode ? 'Modification en cours' : 'Nouveau manuel' }}</span>
+      </div>
+      <div class="add-book-hero__stat">
+        <span class="add-book-hero__stat-label">Progression</span>
+        <span class="add-book-hero__stat-value">Étape 1 sur 1</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="add-book-card">
+    <header class="add-book-card__header">
+      <div>
+        <h2 class="add-book-card__title">Informations sur le manuel</h2>
+        <p class="add-book-card__subtitle">Renseignez les métadonnées essentielles pour référencer correctement le manuel dans le catalogue.</p>
+      </div>
+    </header>
+
+    <div *ngIf="message" class="form-alert" [ngClass]="{ 'form-alert--success': !isError, 'form-alert--error': isError }">
+      <i data-feather="info" class="form-alert__icon"></i>
+      <span>{{ message }}</span>
+    </div>
+
+    <form class="add-book-form" (ngSubmit)="addBook($event); $event.preventDefault()">
+      <div class="form-grid">
+        <!-- Titre -->
+        <div class="form-group">
+          <label for="title" class="form-label">
+            Titre <span>*</span>
+        </label>
+        <input type="text" id="title" name="title" [(ngModel)]="book.title" required
+                 class="form-control" placeholder="Le manuel des sciences naturelles">
+          <div id="title-error" class="form-error"></div>
+      </div>
+
+      <!-- Auteur -->
+        <div class="form-group">
+          <label for="author" class="form-label">
+            Auteur <span>*</span>
+        </label>
+        <input type="text" id="author" name="author" [(ngModel)]="book.author" required
+                 class="form-control" placeholder="Nom et prénom de l'auteur">
+          <div id="author-error" class="form-error"></div>
+      </div>
+
+      <!-- Éditeur -->
+        <div class="form-group">
+          <label for="publisher" class="form-label">
+            Éditeur <span>*</span>
+        </label>
+        <input type="text" id="publisher" name="publisher" [(ngModel)]="book.publisher" required
+                 class="form-control" placeholder="Maison d'édition">
+          <div id="publisher-error" class="form-error"></div>
+      </div>
+
+      <!-- Matière -->
+        <div class="form-group">
+          <label for="subject" class="form-label">
+            Matière <span>*</span>
+        </label>
+        <input type="text" id="subject" name="subject" [(ngModel)]="book.subject" required
+                 class="form-control" placeholder="Discipline ou programme">
+          <div id="subject-error" class="form-error"></div>
+      </div>
+
+      <!-- Description -->
+        <div class="form-group form-group--full">
+          <label for="description" class="form-label">
+          Description
+        </label>
+        <textarea id="description" name="description" [(ngModel)]="book.description" rows="4"
+                    class="form-control form-control--textarea" placeholder="Résumé, objectifs pédagogiques, éditions..."></textarea>
+          <div id="description-error" class="form-error"></div>
+      </div>
+
+      <!-- Image -->
+        <div class="form-group form-group--full">
+          <label for="image" class="form-label">Illustration du manuel</label>
+          <div class="form-file">
+            <label class="form-file__label" for="image">
+              <i data-feather="upload-cloud" class="form-file__icon"></i>
+              <div>
+                <span class="form-file__title">Déposer une image</span>
+                <span class="form-file__subtitle">PNG, JPG jusqu'à 5MB</span>
+              </div>
+            </label>
+            <input type="file" id="image" name="image" accept="image/*" (change)="onImageSelected($event)" class="form-file__input">
+            <button type="button" id="removeImage" class="form-file__remove" (click)="removeImage()">
+              <i data-feather="x-circle"></i>
+              Retirer l'image
+          </button>
+        </div>
+          <div id="imagePreviewContainer" class="form-file__preview" [class.form-file__preview--visible]="book.image">
+            <img [src]="book.image" alt="Aperçu de l'image">
+          </div>
+          <div id="image-error" class="form-error"></div>
+      </div>
+
+      <!-- Niveau scolaire -->
+        <div class="form-group">
+          <label for="level_id" class="form-label">
+            Niveau scolaire <span>*</span>
+        </label>
+          <div class="form-select-wrapper">
+            <select id="level_id" name="level_id" [(ngModel)]="book.level_id" required class="form-select">
+              <option value="" disabled>Sélectionnez un niveau</option>
+          <option *ngFor="let level of levels" [value]="level.id">{{ level.name }}</option>
+        </select>
+            <i data-feather="chevron-down" class="form-select__icon"></i>
+          </div>
+          <div id="level_id-error" class="form-error"></div>
+      </div>
+
+        <!-- Options -->
+        <div class="form-group">
+          <label class="form-label">Options de mise en avant</label>
+          <div class="form-switches">
+            <label class="form-switch">
+              <input id="is_new" name="is_new" type="checkbox" [(ngModel)]="book.is_new">
+              <span class="form-switch__indicator"></span>
+              <span class="form-switch__label">Nouveau</span>
+            </label>
+            <label class="form-switch">
+              <input id="is_popular" name="is_popular" type="checkbox" [(ngModel)]="book.is_popular">
+              <span class="form-switch__indicator"></span>
+              <span class="form-switch__label">Populaire</span>
+        </label>
+      </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button *ngIf="showBackButton" type="button" class="form-button form-button--secondary" (click)="onCancel()">
+          <i data-feather="arrow-left"></i>
+          Retour
+        </button>
+        <button type="submit" class="form-button form-button--primary">
+          <i data-feather="check-circle"></i>
+          {{ isEditMode ? 'Mettre à jour le manuel' : 'Ajouter le manuel' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

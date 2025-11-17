@@ -1,0 +1,78 @@
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ bookId ? 'Modifier le manuel' : 'Ajouter un manuel' }}</h2>
+
+    <form (submit)="updateBook($event)">
+        <!-- Champs du formulaire -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700">Titre</label>
+                <input type="text" id="title" name="title" [(ngModel)]="book.title" required
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            <div>
+                <label for="author" class="block text-sm font-medium text-gray-700">Auteur</label>
+                <input type="text" id="author" name="author" [(ngModel)]="book.author" required
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="publisher" class="block text-sm font-medium text-gray-700">Éditeur</label>
+                <input type="text" id="publisher" name="publisher" [(ngModel)]="book.publisher"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+            <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700">Matière</label>
+                <input type="text" id="subject" name="subject" [(ngModel)]="book.subject"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="description" name="description" [(ngModel)]="book.description" rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
+        </div>
+
+        <div class="mb-4">
+            <label for="level_id" class="block text-sm font-medium text-gray-700">Niveau Scolaire</label>
+            <select id="level_id" name="level_id" [(ngModel)]="book.level_id" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                <option *ngFor="let level of levels" [value]="level.id">{{ level.name }}</option>
+            </select>
+        </div>
+
+        <div class="mb-4 flex items-center">
+            <input type="checkbox" id="is_new" name="is_new" [(ngModel)]="book.is_new"
+                class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+            <label for="is_new" class="ml-2 block text-sm text-gray-900">Nouveau manuel</label>
+        </div>
+
+        <div class="mb-4 flex items-center">
+            <input type="checkbox" id="is_popular" name="is_popular" [(ngModel)]="book.is_popular"
+                class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+            <label for="is_popular" class="ml-2 block text-sm text-gray-900">Populaire</label>
+        </div>
+
+        <!-- Image Preview and Input -->
+        <div class="mb-4">
+            <label for="image_url" class="block text-sm font-medium text-gray-700">URL de l'image</label>
+            <input type="text" id="image_url" name="image_url" [(ngModel)]="book.image_url"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+            <div *ngIf="book.image_url" class="mt-4">
+                <img [src]="book.image_url" alt="Aperçu de l'image" class="max-w-xs h-auto rounded-md shadow-sm">
+            </div>
+        </div>
+
+        <div *ngIf="message" class="mt-4 p-3 rounded-md text-sm" [ngClass]="{'bg-red-100 text-red-700': isError, 'bg-green-100 text-green-700': !isError}">
+            {{ message }}
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" (click)="updateBook($event)" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                Modifier le manuel
+            </button>
+        </div>
+    </form>
+</div>

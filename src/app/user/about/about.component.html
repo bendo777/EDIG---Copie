@@ -1,0 +1,262 @@
+<div class="about-shell">
+  <!-- Fond de quadrillage pour toute la page -->
+  <div class="about-shell__grid-background" aria-hidden="true"></div>
+  
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+      <nav class="site-nav">
+        <a class="site-nav__link" routerLink="/bibliotheque/collection">Catalogue</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/niveaux">Niveaux</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/nouveautes">Nouveautés</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/populaires">Populaires</a>
+        <a class="site-nav__link site-nav__link--active" routerLink="/bibliotheque/a-propos">À propos</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/contact">Contacts</a>
+      </nav>
+      <div class="site-actions">
+        <ng-container *ngIf="user; else noUser">
+          <div class="site-profile" (click)="$event.stopPropagation(); toggleProfileMenu()" tabindex="0" role="button" aria-haspopup="true" [attr.aria-expanded]="showProfileMenu">
+            <img
+              class="site-profile__avatar"
+              [src]="userAvatar"
+              [alt]="userName"
+              onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=6366f1&color=fff&size=128'"
+            />
+            <div class="site-profile__info">
+              <span class="site-profile__name">{{ userName }}</span>
+              <span class="site-profile__email">{{ userEmail }}</span>
+            </div>
+
+            <div *ngIf="showProfileMenu" class="profile-menu" (click)="$event.stopPropagation()">
+              <div class="profile-menu__header">
+                <div class="profile-menu__avatar-wrap">
+                  <img [src]="userAvatar" [alt]="userName" class="profile-menu__avatar" />
+                </div>
+                <div class="profile-menu__meta">
+                  <div class="profile-menu__name">{{ userName }}</div>
+                  <div class="profile-menu__email">{{ userEmail }}</div>
+                </div>
+              </div>
+              <ul class="profile-menu__list">
+                <li>
+                  <a class="profile-menu__link" (click)="goToAccount()">
+                    <i data-feather="user" class="w-4 h-4" aria-hidden="true"></i>
+                    Mon compte
+                  </a>
+                </li>
+                <li>
+                  <button type="button" class="profile-menu__logout" (click)="logout()">
+                    <i data-feather="log-out" class="w-4 h-4" aria-hidden="true"></i>
+                    Se déconnecter
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noUser>
+          <a routerLink="/login" class="site-actions__link">Se connecter</a>
+          <a routerLink="/inscription" class="site-actions__cta">S'inscrire</a>
+        </ng-template>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="about-hero">
+      <div class="about-hero__decor about-hero__decor--orb"></div>
+      <div class="about-hero__decor about-hero__decor--sparkles"></div>
+
+      <div class="about-hero__inner">
+        <div class="about-hero__content">
+          <p class="about-hero__eyebrow">Notre histoire</p>
+          <h1>
+            EDIG accompagne les enseignants gabonais avec des ressources conçues sur le terrain, pour des classes plus sereines.
+          </h1>
+          <p>
+            Nous travaillons main dans la main avec l’Institut Pédagogique National, les équipes enseignantes et les familles pour proposer des
+            manuels qui reflètent les réalités, les langues et l’énergie des élèves gabonais.
+          </p>
+          <div class="about-hero__cta">
+            <a routerLink="/bibliotheque/collection" class="btn btn--primary">Découvrir nos collections</a>
+            <a routerLink="/bibliotheque/contact" class="btn btn--ghost">Échanger avec l’équipe</a>
+          </div>
+        </div>
+        <div class="about-hero__visual">
+          <div class="about-hero__card">
+            <h3>Notre promesse</h3>
+            <ul>
+              <li>Des contenus certifiés IPN</li>
+              <li>Un suivi personnalisé par province</li>
+              <li>Des ressources numériques accessibles</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-stats">
+      <div class="about-stats__grid">
+        <article *ngFor="let stat of stats" class="stat-card">
+          <p class="stat-card__value">{{ stat.value }}</p>
+          <p class="stat-card__label">{{ stat.label }}</p>
+          <p class="stat-card__detail">{{ stat.detail }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-pillars" id="mission">
+      <div class="section-header">
+        <span class="section-eyebrow">Notre mission</span>
+        <h2>Donner à chaque classe gabonaise des outils actuels, contextualisés et simples à déployer.</h2>
+        <p>
+          Les équipes EDIG s’appuient sur des ateliers de co-conception, des visites d’établissement et des moments d’observation en classe
+          pour imaginer les ressources les plus utiles.
+        </p>
+      </div>
+      <div class="pillar-grid">
+        <article *ngFor="let pillar of pillars" class="pillar-card">
+          <div class="pillar-card__icon">{{ pillar.icon }}</div>
+          <h3>{{ pillar.title }}</h3>
+          <p>{{ pillar.description }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-story">
+      <div class="section-header">
+        <span class="section-eyebrow">Nos jalons</span>
+        <h2>Une progression construite avec le ministère et les communautés éducatives.</h2>
+        <p>Chaque étape renforce notre capacité à diffuser des ressources fiables et à accompagner les équipes de terrain.</p>
+      </div>
+
+      <div class="timeline">
+        <article *ngFor="let step of timeline; let last = last" class="timeline-item" [class.timeline-item--last]="last">
+          <div class="timeline-item__bullet"></div>
+          <div class="timeline-item__body">
+            <p class="timeline-item__year">{{ step.year }}</p>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-impact">
+      <div class="section-header">
+        <span class="section-eyebrow">Notre impact</span>
+        <h2>Un réseau qui relie enseignants, élèves et familles.</h2>
+        <p>Les actions EDIG couvrent l’accompagnement pédagogique, l’innovation numérique et le lien avec les parents.</p>
+      </div>
+      <div class="impact-grid">
+        <article *ngFor="let card of impactCards" class="impact-card" [ngClass]="card.accentClass">
+          <h3>{{ card.title }}</h3>
+          <ul>
+            <li *ngFor="let point of card.points">{{ point }}</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-leadership">
+      <div class="section-header">
+        <span class="section-eyebrow">Équipe</span>
+        <h2>Des profils complémentaires pour soutenir les communautés éducatives.</h2>
+        <p>Nos responsables coordonnent auteurs, formateurs et partenaires institutionnels à chaque étape.</p>
+      </div>
+      <div class="leadership-grid">
+        <article *ngFor="let leader of leadership" class="leader-card">
+          <div class="leader-card__avatar">
+            <img [src]="leader.photoUrl" [alt]="leader.name" loading="lazy" />
+          </div>
+          <h3>{{ leader.name }}</h3>
+          <p class="leader-card__role">{{ leader.role }}</p>
+          <p class="leader-card__bio">{{ leader.bio }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <div class="about-cta__content">
+        <h2>Envie de rejoindre nos programmes pilotes ?</h2>
+        <p>Planifiez un échange avec nos équipes pour préparer les dotations de votre établissement ou former vos enseignants.</p>
+      </div>
+      <div class="about-cta__actions">
+        <a routerLink="/bibliotheque/collection" class="btn btn--primary">Voir les collections</a>
+        <a routerLink="/bibliotheque/contact" class="btn btn--ghost">Contacter EDIG</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">
+        <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+        <p>
+          EDIG · édicef — Institut Pédagogique National<br>
+          Votre partenaire pour l'éducation et les ressources pédagogiques de qualité.
+        </p>
+        <div class="site-footer__school-icons">
+          <div class="school-icon" title="Manuels scolaires">
+            <i data-feather="book" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div class="school-icon" title="Cahiers d'exercices">
+            <i data-feather="edit-3" class="w-5 h-5 text-sky-400"></i>
+          </div>
+          <div class="school-icon" title="Ressources numériques">
+            <i data-feather="monitor" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+          <div class="school-icon" title="Guides pédagogiques">
+            <i data-feather="compass" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="book-open" class="w-4 h-4"></i>
+          Navigation
+        </h3>
+        <div class="site-footer__links">
+          <a routerLink="/bibliotheque/collection">Collection complète</a>
+          <a routerLink="/bibliotheque/niveaux">Niveaux scolaires</a>
+          <a routerLink="/bibliotheque/nouveautes">Nouveautés</a>
+          <a routerLink="/bibliotheque/populaires">Populaires</a>
+          <a routerLink="/bibliotheque/a-propos">À propos</a>
+          <a routerLink="/bibliotheque/contact">Contacts</a>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="share-2" class="w-4 h-4"></i>
+          Suivez-nous
+        </h3>
+        <div class="site-footer__socials">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener">
+            <i data-feather="facebook" class="w-4 h-4"></i>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener">
+            <i data-feather="instagram" class="w-4 h-4"></i>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener">
+            <i data-feather="youtube" class="w-4 h-4"></i>
+            YouTube
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">
+            <i data-feather="twitter" class="w-4 h-4"></i>
+            Twitter
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-footer__bottom">
+      <p>&copy; {{ currentYear }} EDIG - Tous droits réservés | Institut Pédagogique National du Gabon</p>
+    </div>
+  </footer>
+</div>
+
+

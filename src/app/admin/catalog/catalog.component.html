@@ -1,0 +1,401 @@
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-white border-r border-gray-200">
+            <div class="flex items-center justify-center h-16 px-4 bg-primary">
+                <div class="flex items-center">
+                    <i data-feather="book" class="text-white mr-2"></i>
+                    <span class="text-white font-semibold text-lg">EduPulse</span>
+                </div>
+            </div>
+            <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                <div class="space-y-1">
+                    <a routerLink="/admin/dashboard" class="flex items-center px-2 py-3 text-sm font-medium rounded-md text-gray-600 hover:text-primary hover:bg-gray-50 group">
+                        <i data-feather="home" class="mr-3"></i>
+                        Tableau de bord
+                    </a>
+                    <a routerLink="/admin/books" class="flex items-center px-2 py-3 text-sm font-medium rounded-md text-white bg-primary group">
+                        <i data-feather="book-open" class="mr-3"></i>
+                        Gestion de catalogue
+                    </a>
+                    <a href="#" class="flex items-center px-2 py-3 text-sm font-medium rounded-md text-gray-600 hover:text-primary hover:bg-gray-50 group">
+                        <i data-feather="tag" class="mr-3"></i>
+                        Gestion des matières
+                    </a>
+                    <a routerLink="/admin/users" class="flex items-center px-2 py-3 text-sm font-medium rounded-md text-gray-600 hover:text-primary hover:bg-gray-50 group">
+                        <i data-feather="users" class="mr-3"></i>
+                        Utilisateurs
+                    </a>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center">
+                    <img class="h-10 w-10 rounded-full" src="http://static.photos/people/200x200/1" alt="Admin">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-700">Admin</p>
+                        <p class="text-xs font-medium text-gray-500">Administrateur</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top navigation -->
+        <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+            <div class="flex items-center">
+                <button class="md:hidden text-gray-500 focus:outline-none">
+                    <i data-feather="menu"></i>
+                </button>
+                <h1 class="ml-2 text-lg font-semibold text-gray-800">Gestion des catalogues</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none">
+                    <i data-feather="bell"></i>
+                </button>
+                <button class="p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none">
+                    <i data-feather="help-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Catalogue content -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- Filters and search -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-feather="search" class="text-gray-400"></i>
+                            </div>
+                            <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" placeholder="Rechercher un manuel...">
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            <i data-feather="filter" class="mr-2 w-4 h-4"></i>
+                            Filtrer
+                        </button>
+                        <button class="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            <i data-feather="plus" class="mr-2 w-4 h-4"></i>
+                            Ajouter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200">Tous</button>
+                        <button class="filter-btn active px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-primary">Préprimaire</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-secondary">Primaire</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-500">6ème</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-500">5ème</button>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200">Toutes matières</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-500">Mathématiques</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-500">Français</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-500">Sciences</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-500">Histoire-Géo</button>
+                        <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-500">Anglais</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Books grid -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800">Manuels scolaires</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500">247 résultats</span>
+                        <select class="block w-32 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md">
+                            <option>Trier par</option>
+                            <option>Récent</option>
+                            <option>Ancien</option>
+                            <option>Alphabétique</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Book 1 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/1" alt="Maths 6ème" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Mathématiques 6ème</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">6ème</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-500">Maths</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 15/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 2 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/2" alt="Français 5ème" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Français 5ème</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">5ème</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-500">Français</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 12/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 3 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/3" alt="Sciences Primaire" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Sciences Primaire</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">Primaire</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-500">Sciences</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 10/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 4 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/4" alt="Histoire-Géo 6ème" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Histoire-Géo 6ème</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">6ème</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-500">Histoire</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 08/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 5 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/5" alt="Activités Préprimaire" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Activités Préprimaire</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">Préprimaire</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-pink-100 text-pink-500">Activités</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 05/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 6 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/6" alt="Anglais 5ème" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Anglais 5ème</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">5ème</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-500">Anglais</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 03/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 7 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/7" alt="Lecture Primaire" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Lecture Primaire</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">Primaire</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-500">Français</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 01/06/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book 8 -->
+                    <div class="book-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 relative">
+                        <div class="relative">
+                            <img src="http://static.photos/education/320x240/8" alt="Maths 5ème" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 flex space-x-1">
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-primary hover:text-white transition-all">
+                                    <i data-feather="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-2 bg-white rounded-full shadow hover:bg-secondary hover:text-white transition-all">
+                                    <i data-feather="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Mathématiques 5ème</h3>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-primary">5ème</span>
+                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-500">Maths</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">Ajouté le 28/05/2023</span>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-8 flex items-center justify-between">
+                    <div class="flex-1 flex justify-between sm:hidden">
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Précédent
+                        </a>
+                        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Suivant
+                        </a>
+                    </div>
+                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-sm text-gray-700">
+                                Affichage de
+                                <span class="font-medium">1</span> à
+                                <span class="font-medium">8</span> sur
+                                <span class="font-medium">247</span> résultats
+                            </p>
+                        </div>
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Previous</span>
+                                    <i data-feather="chevron-left" class="h-5 w-5"></i>
+                                </a>
+                                <a href="#" aria-current="page" class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    1
+                                </a>
+                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    2
+                                </a>
+                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    3
+                                </a>
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                    ...
+                                </span>
+                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    8
+                                </a>
+                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Next</span>
+                                    <i data-feather="chevron-right" class="h-5 w-5"></i>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

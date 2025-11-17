@@ -1,0 +1,62 @@
+<div *ngIf="isVisible" class="manual-modal" (click)="onClose()">
+  <div class="manual-modal__dialog" (click)="$event.stopPropagation()">
+    <header class="manual-modal__header">
+      <div class="manual-modal__header-text">
+        <span class="manual-modal__badge">Détails</span>
+        <h3 class="manual-modal__title">{{ manual?.title }}</h3>
+        <p class="manual-modal__subtitle" *ngIf="manual?.author">Par {{ manual?.author }}</p>
+      </div>
+      <button type="button" class="manual-modal__close" (click)="onClose()">
+        <i data-feather="x"></i>
+      </button>
+    </header>
+
+    <section class="manual-modal__body" *ngIf="manual">
+      <div class="manual-modal__media" *ngIf="manual.image_url; else placeholder">
+        <img [src]="manual.image_url" [alt]="manual.title" loading="lazy" />
+      </div>
+      <ng-template #placeholder>
+        <div class="manual-modal__media manual-modal__media--placeholder">
+          <i data-feather="book"></i>
+        </div>
+      </ng-template>
+
+      <div class="manual-modal__details">
+        <div class="manual-modal__grid">
+          <div class="manual-modal__detail">
+            <span class="manual-modal__detail-label">Titre</span>
+            <span class="manual-modal__detail-value">{{ manual.title }}</span>
+          </div>
+          <div class="manual-modal__detail">
+            <span class="manual-modal__detail-label">Auteur</span>
+            <span class="manual-modal__detail-value">{{ manual.author || 'Non renseigné' }}</span>
+          </div>
+          <div class="manual-modal__detail" *ngIf="manual.publisher">
+            <span class="manual-modal__detail-label">Éditeur</span>
+            <span class="manual-modal__detail-value">{{ manual.publisher }}</span>
+          </div>
+          <div class="manual-modal__detail" *ngIf="manual.subject">
+            <span class="manual-modal__detail-label">Matière</span>
+            <span class="manual-modal__detail-value">{{ manual.subject }}</span>
+          </div>
+          <div class="manual-modal__detail">
+            <span class="manual-modal__detail-label">Ajouté le</span>
+            <span class="manual-modal__detail-value">{{ manual.created_at | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        <div class="manual-modal__description" *ngIf="manual.description">
+          <h4>Description</h4>
+          <p>{{ manual.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="manual-modal__footer">
+      <button type="button" class="manual-modal__button" (click)="onClose()">
+        <i data-feather="x-circle"></i>
+          Fermer
+        </button>
+    </footer>
+  </div>
+</div>

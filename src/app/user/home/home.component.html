@@ -1,0 +1,458 @@
+<div class="home-shell">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+      <nav class="site-nav">
+        <ng-container *ngFor="let link of navLinks">
+          <ng-container *ngIf="link.route; else fragmentLink">
+            <a class="site-nav__link" [routerLink]="link.route">{{ link.label }}</a>
+          </ng-container>
+          <ng-template #fragmentLink>
+            <a class="site-nav__link" [attr.href]="'#' + link.fragment">{{ link.label }}</a>
+          </ng-template>
+        </ng-container>
+      </nav>
+      <div class="site-actions">
+        <ng-container *ngIf="user; else noUser">
+          <div class="site-profile" (click)="$event.stopPropagation(); toggleProfileMenu()" tabindex="0" role="button" aria-haspopup="true" [attr.aria-expanded]="showProfileMenu">
+            <img
+              class="site-profile__avatar"
+              [src]="userAvatar"
+              [alt]="userName"
+              onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=6366f1&color=fff&size=128'"
+            />
+            <div class="site-profile__info">
+              <span class="site-profile__name">{{ userName }}</span>
+            </div>
+
+            <div *ngIf="showProfileMenu" class="profile-menu" (click)="$event.stopPropagation()">
+              <div class="profile-menu__header">
+                <div class="profile-menu__avatar-wrap">
+                  <img [src]="userAvatar" [alt]="userName" class="profile-menu__avatar" />
+                </div>
+                <div class="profile-menu__meta">
+                  <div class="profile-menu__name">{{ userName }}</div>
+                  <div class="profile-menu__email">{{ userEmail }}</div>
+                </div>
+              </div>
+              <ul class="profile-menu__list">
+                <li>
+                  <a class="profile-menu__link" (click)="goToAccount()">
+                    <i data-feather="user" class="w-4 h-4" aria-hidden="true"></i>
+                    Mon compte
+                  </a>
+                </li>
+                <li>
+                  <button type="button" class="profile-menu__logout" (click)="logout()">
+                    <i data-feather="log-out" class="w-4 h-4" aria-hidden="true"></i>
+                    Se déconnecter
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noUser>
+          <a routerLink="/login" class="site-actions__link">Se connecter</a>
+          <a routerLink="/inscription" class="site-actions__cta">S'inscrire</a>
+        </ng-template>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="niveau">
+      <!-- Fond de quadrillage pour toute la section -->
+      <div class="hero__grid-background" aria-hidden="true"></div>
+      
+      <div class="hero__decor hero__decor--dots"></div>
+      <div class="hero__decor hero__decor--blob"></div>
+      <div class="hero__decor hero__decor--paper"></div>
+      <div class="section-grid section-grid--hero section-grid--top-left" aria-hidden="true"></div>
+      <div class="section-grid section-grid--hero section-grid--bottom-right" aria-hidden="true"></div>
+      <div class="section-grid section-grid--hero section-grid--top-right" aria-hidden="true"></div>
+      <div class="section-grid section-grid--hero section-grid--bottom-left" aria-hidden="true"></div>
+      
+      <!-- Motifs scolaires animés -->
+      <div class="school-motif school-motif--ruler" aria-hidden="true"></div>
+      <div class="school-motif school-motif--pencil" aria-hidden="true"></div>
+      <div class="school-motif school-motif--notebook" aria-hidden="true"></div>
+      <div class="school-motif school-motif--eraser" aria-hidden="true"></div>
+
+      <div class="hero__inner">
+        <div class="hero__content">
+          <h1>Des manuels scolaires faits par des Gabonais pour les Gabonais.</h1>
+          <p>
+            Pré-primaire, primaire ou cycle 1 : nos collections sont imaginées avec les enseignants du terrain,
+            certifiées par le ministère et prêtes à être utilisées en classe comme à la maison.
+          </p>
+
+          <div class="hero__levels">
+            <button
+              *ngFor="let level of levelTabs"
+              type="button"
+              class="hero__level"
+              [class.hero__level--active]="level === selectedLevel"
+              (click)="setLevel(level)"
+            >
+              {{ level }}
+            </button>
+          </div>
+
+          <div class="hero__cta">
+            <a routerLink="/bibliotheque/collection" class="btn btn--primary ripple-effect">Découvrir les manuels</a>
+            <a routerLink="/bibliotheque/contact" class="btn btn--outline ripple-effect">Nous contacter</a>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <div class="collage">
+            <div class="collage__photo collage__photo--main"></div>
+            <div class="collage__photo collage__photo--secondary"></div>
+            <div class="collage__card">
+              <p>Une bibliothèque 100 % gabonaise</p>
+              <span>+ de 150 titres conformes aux nouveaux programmes</span>
+            </div>
+            <div class="collage__scribble collage__scribble--heart"></div>
+            <div class="collage__scribble collage__scribble--star"></div>
+          </div>
+          <div class="hero__floating-card hero__floating-card--note">
+            <span class="hero__floating-label">Carnet de classe</span>
+            <strong>Semaine 3 · Lecture active</strong>
+            <ul>
+              <li>Jour 1 — Comprendre</li>
+              <li>Jour 3 — Manipuler</li>
+              <li>Jour 5 — Évaluer</li>
+            </ul>
+          </div>
+          <div class="hero__floating-card hero__floating-card--badge">
+            <span>Bibliothèque active</span>
+            <strong>1 250 classes</strong>
+            <small>+92 % d’enseignants satisfaits</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="team" id="apropos">
+      <div class="section-grid section-grid--team section-grid--top-left" aria-hidden="true"></div>
+      <div class="section-grid section-grid--team section-grid--bottom-right" aria-hidden="true"></div>
+      
+      <!-- Motifs d'enseignement sur les côtés -->
+      <div class="team__teaching-motif team__teaching-motif--left" aria-hidden="true"></div>
+      <div class="team__teaching-motif team__teaching-motif--right" aria-hidden="true"></div>
+      
+      <div class="wave wave--top">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,64L60,69.3C120,75,240,85,360,90.7C480,96,600,96,720,85.3C840,75,960,53,1080,53.3C1200,53,1320,75,1380,85.3L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+        </svg>
+      </div>
+      <div class="team__inner">
+        <h2>Une équipe proche de vos classes</h2>
+        <p class="team__intro">
+          Autrices, coordinateurs éditoriaux et formateurs s’engagent avec vous pour imaginer des supports qui ressemblent aux
+          élèves gabonais et à leurs environnements d’apprentissage.
+        </p>
+
+        <div class="team__grid">
+          <article *ngFor="let member of teamMembers; let i = index" class="team-card">
+            <div class="team-card__avatar" [style.background-image]="'url(' + getTeamMemberPhoto(i) + ')'"></div>
+            <h3>{{ member.name }}</h3>
+            <p class="team-card__role">{{ member.role }}</p>
+            <p class="team-card__description">{{ member.description }}</p>
+          </article>
+        </div>
+      </div>
+      <div class="wave wave--bottom">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,0L60,10.7C120,21,240,43,360,48C480,53,600,43,720,37.3C840,32,960,32,1080,48C1200,64,1320,96,1380,112L1440,128L1440,120L1380,120C1320,120,1200,120,1080,120C960,120,840,120,720,120C600,120,480,120,360,120C240,120,120,120,60,120L0,120Z"></path>
+        </svg>
+      </div>
+    </section>
+
+    <section class="approach" id="collections">
+      <!-- Fond de quadrillage pour toute la section -->
+      <div class="approach__grid-background" aria-hidden="true"></div>
+      
+      <div class="section-grid section-grid--approach section-grid--top-right" aria-hidden="true"></div>
+      <div class="section-grid section-grid--approach section-grid--bottom-left" aria-hidden="true"></div>
+      <div class="approach__inner">
+        <div class="approach__visual">
+          <div class="manual-stack">
+            <div class="manual manual--maths">Super Maths</div>
+            <div class="manual manual--lecture">Lecture active</div>
+            <div class="manual manual--sciences">Sciences du quotidien</div>
+          </div>
+          <div class="approach__badge">Une approche 100 % compétences</div>
+        </div>
+        <div class="approach__content">
+          <h2>Le manuel qu’il vous faut est forcément ici.</h2>
+          <p>100 % conforme aux nouveaux programmes et pensé pour accompagner chaque élève à son rythme.</p>
+
+          <ul class="approach__list">
+            <li *ngFor="let point of approachPoints">
+              <strong>{{ point.title }}</strong>
+              <span>{{ point.description }}</span>
+            </li>
+          </ul>
+
+          <a routerLink="/bibliotheque/collection" class="btn btn--primary">Voir toutes les collections</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-listing home-listing--nouveautes" id="nouveautes">
+      <div class="section-grid section-grid--sunrise section-grid--top-left" aria-hidden="true"></div>
+      <div class="section-grid section-grid--sky section-grid--bottom-right" aria-hidden="true"></div>
+      
+      <!-- Instruments scolaires décoratifs -->
+      <div class="school-instrument school-instrument--compass-left" aria-hidden="true"></div>
+      <div class="school-instrument school-instrument--ruler-right" aria-hidden="true"></div>
+      <div class="school-instrument school-instrument--calculator-left" aria-hidden="true"></div>
+      <div class="school-instrument school-instrument--pen-right" aria-hidden="true"></div>
+      
+      <div class="home-listing__inner">
+        <h2>Nouveautés</h2>
+        <p class="home-listing__intro">Les derniers titres publiés, prêts à être utilisés en classe.</p>
+        <div class="home-listing__grid">
+          <article class="card">
+            <div class="card__badge">Nouveau</div>
+            <h3>Lecture CP – Parcours 1</h3>
+            <p>Des textes progressifs et des activités de compréhension guidées.</p>
+          </article>
+          <article class="card">
+            <div class="card__badge">Nouveau</div>
+            <h3>Mathématiques 6e – Séquences</h3>
+            <p>Manipulations, problèmes contextualisés et auto-évaluations.</p>
+          </article>
+          <article class="card">
+            <div class="card__badge">Nouveau</div>
+            <h3>SVT Seconde – Découvertes</h3>
+            <p>Expériences filmées et fiches pratiques pour le laboratoire.</p>
+          </article>
+        </div>
+  <a routerLink="/bibliotheque/collection" class="btn btn--primary home-listing__cta">Voir toutes les nouveautés</a>
+      </div>
+    </section>
+
+    <section class="home-listing home-listing--alt home-listing--populaires" id="populaires">
+      <div class="section-grid section-grid--mint section-grid--top-right" aria-hidden="true"></div>
+      <div class="section-grid section-grid--lavender section-grid--bottom-left" aria-hidden="true"></div>
+      
+      <!-- Motifs scolaires décoratifs -->
+      <div class="populaires-motif populaires-motif--book-left" aria-hidden="true"></div>
+      <div class="populaires-motif populaires-motif--star-right" aria-hidden="true"></div>
+      <div class="populaires-motif populaires-motif--trophy-left" aria-hidden="true"></div>
+      <div class="populaires-motif populaires-motif--medal-right" aria-hidden="true"></div>
+      
+      <div class="home-listing__inner">
+        <h2>Populaires</h2>
+        <p class="home-listing__intro">Les titres les plus consultés par la communauté.</p>
+        <div class="home-listing__grid">
+          <article class="card">
+            <div class="card__badge card__badge--alt">Top</div>
+            <h3>Français 5e – Expression écrite</h3>
+            <p>Ateliers d’écriture et grilles de relecture prêtes à l’emploi.</p>
+          </article>
+          <article class="card">
+            <div class="card__badge card__badge--alt">Top</div>
+            <h3>Physique-Chimie 3e – Expériences</h3>
+            <p>Protocole pas à pas et vidéos de démonstration.</p>
+          </article>
+          <article class="card">
+            <div class="card__badge card__badge--alt">Top</div>
+            <h3>Histoire-Géo 2nde – Mondes connectés</h3>
+            <p>Études de cas actuelles et cartes interactives.</p>
+          </article>
+        </div>
+  <a routerLink="/bibliotheque/collection" class="btn btn--outline home-listing__cta">Parcourir le catalogue</a>
+      </div>
+    </section>
+
+    <section class="values" id="values">
+      <div class="section-grid section-grid--values section-grid--top-left" aria-hidden="true"></div>
+      <div class="section-grid section-grid--values section-grid--bottom-right" aria-hidden="true"></div>
+      
+      <!-- Instruments scolaires décoratifs -->
+      <div class="values-instrument values-instrument--book-left" aria-hidden="true"></div>
+      <div class="values-instrument values-instrument--globe-right" aria-hidden="true"></div>
+      <div class="values-instrument values-instrument--star-left" aria-hidden="true"></div>
+      
+      <h2>Nos valeurs</h2>
+      <p class="values__intro">
+        Des manuels conçus avec et pour les enseignants gabonais, pour garantir l'équité et l'excellence dans chaque classe.
+      </p>
+
+      <div class="values__grid">
+        <article *ngFor="let value of valueCards" class="value-card" [ngClass]="value.accentClass">
+          <div class="value-card__icon">{{ value.icon }}</div>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.description }}</p>
+        </article>
+      </div>
+
+      <a routerLink="/bibliotheque/contact" class="btn btn--outline values__cta">Qui sommes-nous ?</a>
+    </section>
+
+    <section class="contact" id="contact">
+      <!-- Fond de quadrillage pour la section contact -->
+      <div class="contact__grid-background" aria-hidden="true"></div>
+      
+      <!-- Motifs scolaires décoratifs -->
+      <div class="contact-motif contact-motif--pen-left" aria-hidden="true"></div>
+      <div class="contact-motif contact-motif--paper-right" aria-hidden="true"></div>
+      
+      <div class="contact__inner">
+        <div class="contact__content">
+          <h2>Faisons connaissance</h2>
+          <p>
+            Renseignez quelques informations pour nous assurer que notre équipe revient vers vous dans les meilleurs délais.
+          </p>
+        </div>
+
+        <form class="contact__form">
+          <div class="form-row">
+            <label>
+              <span>Nom</span>
+              <input type="text" name="name" placeholder="Votre nom complet" required />
+            </label>
+            <label>
+              <span>Adresse email</span>
+              <input type="email" name="email" placeholder="prenom.nom@ecole.ga" required />
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>
+              <span>Vous êtes enseignant·e ?</span>
+              <input type="text" name="role" placeholder="Cycle, matière…" />
+            </label>
+            <label>
+              <span>Où enseignez-vous ?</span>
+              <input type="text" name="school" placeholder="Établissement" />
+            </label>
+          </div>
+
+          <label class="form-checkbox">
+            <input type="checkbox" name="consent" />
+            <span>Oui, je souhaite recevoir les infos sur les ateliers & nouveautés EDIG.</span>
+          </label>
+
+          <button type="submit" class="btn btn--primary">Continuer</button>
+        </form>
+
+        <div class="contact__illustration"></div>
+      </div>
+    </section>
+
+    <section class="newsletter" id="newsletter">
+      <div class="newsletter__inner">
+        <h2>Faites le plein de ressources inédites</h2>
+        <p>Restez informé·e, inscrivez-vous à notre newsletter.</p>
+
+        <form class="newsletter__form">
+          <select name="audience">
+            <option value="enseignant">Enseignant·e</option>
+            <option value="parent">Parent</option>
+            <option value="chef">Chef d’établissement</option>
+          </select>
+          <input type="email" name="newsletterEmail" placeholder="Votre adresse e-mail" required />
+          <button type="submit" class="btn btn--primary">Je m’inscris</button>
+        </form>
+
+        <ul class="newsletter__highlights">
+          <li *ngFor="let topic of newsletterTopics">{{ topic }}</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">
+        <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+        <p>
+          EDIG · édicef — Institut Pédagogique National<br>
+          Votre partenaire pour l'éducation et les ressources pédagogiques de qualité.
+        </p>
+        <div class="site-footer__school-icons">
+          <div class="school-icon" title="Manuels scolaires">
+            <i data-feather="book" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div class="school-icon" title="Cahiers d'exercices">
+            <i data-feather="edit-3" class="w-5 h-5 text-sky-400"></i>
+          </div>
+          <div class="school-icon" title="Ressources numériques">
+            <i data-feather="monitor" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+          <div class="school-icon" title="Guides pédagogiques">
+            <i data-feather="compass" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="book-open" class="w-4 h-4"></i>
+          Navigation
+        </h3>
+        <div class="site-footer__links">
+          <a routerLink="/bibliotheque/collection">
+            <i data-feather="book" class="w-4 h-4"></i>
+            Collection complète
+          </a>
+          <a routerLink="/bibliotheque/niveaux">
+            <i data-feather="layers" class="w-4 h-4"></i>
+            Niveaux scolaires
+          </a>
+          <a routerLink="/bibliotheque/nouveautes">
+            <i data-feather="sparkles" class="w-4 h-4"></i>
+            Nouveautés
+          </a>
+          <a routerLink="/bibliotheque/populaires">
+            <i data-feather="trending-up" class="w-4 h-4"></i>
+            Populaires
+          </a>
+          <a routerLink="/bibliotheque/a-propos">
+            <i data-feather="info" class="w-4 h-4"></i>
+            À propos
+          </a>
+          <a routerLink="/bibliotheque/contact">
+            <i data-feather="mail" class="w-4 h-4"></i>
+            Contacts
+          </a>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="share-2" class="w-4 h-4"></i>
+          Suivez-nous
+        </h3>
+        <div class="site-footer__socials">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener">
+            <i data-feather="facebook" class="w-4 h-4"></i>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener">
+            <i data-feather="instagram" class="w-4 h-4"></i>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener">
+            <i data-feather="youtube" class="w-4 h-4"></i>
+            YouTube
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">
+            <i data-feather="twitter" class="w-4 h-4"></i>
+            Twitter
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-footer__bottom">
+      <p>&copy; {{ currentYear }} EDIG - Tous droits réservés | Institut Pédagogique National du Gabon</p>
+    </div>
+  </footer>
+</div>
+

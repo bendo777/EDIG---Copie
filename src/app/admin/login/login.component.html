@@ -1,0 +1,50 @@
+<div class="login-shell">
+  <div class="login-panel">
+    <div class="login-header">
+      <span class="login-logo">EDIG</span>
+      <h1>Connectez-vous pour une meilleure expérience.</h1>
+      <p>Renseignez vos accès professionnels pour rejoindre votre espace.</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="login()">
+      <label class="login-field">
+        <span>Email professionnel</span>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="prenom.nom@ac-academie.fr"
+          autocomplete="email"
+          required
+        />
+      </label>
+
+      <label class="login-field">
+        <span>Mot de passe</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Votre mot de passe"
+          autocomplete="current-password"
+          required
+        />
+      </label>
+
+      <button class="login-submit" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">Se connecter</span>
+        <span *ngIf="loading" class="login-spinner">
+          <span class="login-spinner__dot"></span>
+          Connexion…
+        </span>
+      </button>
+
+      <p *ngIf="errorMsg" class="login-alert">{{ errorMsg }}</p>
+    </form>
+
+    <div class="login-links">
+      <button type="button" routerLink="/inscription" class="login-register-btn">S'inscrire</button>
+      <a routerLink="/bibliotheque">Continuer sur la bibliothèque</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,557 @@
+<div class="collection-shell">
+
+  <div class="collection-content">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+      <nav class="site-nav">
+        <ng-container *ngFor="let link of navLinks">
+          <ng-container *ngIf="link.route; else fragmentLink">
+            <a class="site-nav__link" [routerLink]="link.route">{{ link.label }}</a>
+          </ng-container>
+          <ng-template #fragmentLink>
+            <a class="site-nav__link" [attr.href]="'#' + link.fragment">{{ link.label }}</a>
+          </ng-template>
+        </ng-container>
+      </nav>
+      <div class="site-actions">
+        <ng-container *ngIf="user; else noUser">
+          <div class="site-profile" (click)="$event.stopPropagation(); toggleProfileMenu()" tabindex="0" role="button" aria-haspopup="true" [attr.aria-expanded]="showProfileMenu">
+            <img
+              class="site-profile__avatar"
+              [src]="userAvatar"
+              [alt]="userName"
+              onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=6366f1&color=fff&size=128'"
+            />
+            <div class="site-profile__info">
+              <span class="site-profile__name">{{ userName }}</span>
+            </div>
+
+            <div *ngIf="showProfileMenu" class="profile-menu" (click)="$event.stopPropagation()">
+              <div class="profile-menu__header">
+                <div class="profile-menu__avatar-wrap">
+                  <img [src]="userAvatar" [alt]="userName" class="profile-menu__avatar" />
+                </div>
+                <div class="profile-menu__meta">
+                  <div class="profile-menu__name">{{ userName }}</div>
+                  <div class="profile-menu__email">{{ userEmail }}</div>
+                </div>
+              </div>
+              <ul class="profile-menu__list">
+                <li>
+                  <a class="profile-menu__link" (click)="goToAccount()">
+                    <i data-feather="user" class="w-4 h-4" aria-hidden="true"></i>
+                    Mon compte
+                  </a>
+                </li>
+                <li>
+                  <button type="button" class="profile-menu__logout" (click)="logout()">
+                    <i data-feather="log-out" class="w-4 h-4" aria-hidden="true"></i>
+                    Se déconnecter
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noUser>
+          <a routerLink="/login" class="site-actions__link">Se connecter</a>
+          <a routerLink="/inscription" class="site-actions__cta">S'inscrire</a>
+        </ng-template>
+      </div>
+    </div>
+  </header>
+
+  <header class="levels-hero">
+    <div class="levels-hero__inner">
+      <div class="levels-hero__content">
+        <span class="levels-badge">Nos cycles scolaires</span>
+        <h1>Construisez vos parcours Primaire, Collège et Lycée avec les manuels EDIG.</h1>
+        <p>
+          Retrouvez des collections conformes aux programmes gabonais
+        </p>
+      </div>
+      <div class="levels-hero__visual">
+        <div class="levels-hero__decor levels-hero__decor--ruler" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--pen" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--pencil" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--notebook" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--eraser" aria-hidden="true"></div>
+        <div class="levels-hero__circle levels-hero__circle--primaire">Primaire</div>
+        <div class="levels-hero__circle levels-hero__circle--college">Collège</div>
+        <div class="levels-hero__circle levels-hero__circle--lycee">Lycée</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative z-10 -mt-16">
+    <!-- School motifs in empty spaces -->
+    <div class="collection-school-motif collection-school-motif--book" aria-hidden="true"></div>
+    <div class="collection-school-motif collection-school-motif--calculator" aria-hidden="true"></div>
+    <div class="collection-school-motif collection-school-motif--compass" aria-hidden="true"></div>
+    <div class="collection-school-motif collection-school-motif--star" aria-hidden="true"></div>
+    <div class="collection-school-motif collection-school-motif--pen" aria-hidden="true"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl shadow-xl ring-1 ring-slate-100 overflow-hidden">
+        <div class="p-6 sm:p-8 lg:p-10">
+          <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+            <div class="relative flex-1">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                <i data-feather="search" class="w-4 h-4"></i>
+              </span>
+              <input
+                type="search"
+                [ngModel]="searchTerm"
+                (ngModelChange)="handleSearchTermChange($event)"
+                placeholder="Rechercher un manuel, un auteur, une matière..."
+                class="block w-full rounded-2xl border border-slate-200 py-3 pl-12 pr-4 shadow-sm focus:border-primary focus:ring-primary"
+              />
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl px-4 py-2 border transition"
+                [class.bg-primary]="sortOption === 'recent'"
+                [class.text-white]="sortOption === 'recent'"
+                [class.border-primary/40]="sortOption === 'recent'"
+                [class.border-slate-200]="sortOption !== 'recent'"
+                [class.text-slate-600]="sortOption !== 'recent'"
+                (click)="setSort('recent')"
+              >
+                <i data-feather="clock" class="w-4 h-4"></i>
+                Récent
+              </button>
+
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl px-4 py-2 border transition"
+                [class.bg-primary]="sortOption === 'alphabetical'"
+                [class.text-white]="sortOption === 'alphabetical'"
+                [class.border-primary/40]="sortOption === 'alphabetical'"
+                [class.border-slate-200]="sortOption !== 'alphabetical'"
+                [class.text-slate-600]="sortOption !== 'alphabetical'"
+                (click)="setSort('alphabetical')"
+              >
+                <i data-feather="type" class="w-4 h-4"></i>
+                Alphabétique
+              </button>
+
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl px-4 py-2 border transition"
+                [class.bg-primary]="sortOption === 'popular'"
+                [class.text-white]="sortOption === 'popular'"
+                [class.border-primary/40]="sortOption === 'popular'"
+                [class.border-slate-200]="sortOption !== 'popular'"
+                [class.text-slate-600]="sortOption !== 'popular'"
+                (click)="setSort('popular')"
+              >
+                <i data-feather="trending-up" class="w-4 h-4"></i>
+                Populaire
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="levels.length" class="mt-10">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold text-slate-900">Niveaux scolaires</h2>
+              <button
+                type="button"
+                class="text-sm text-primary hover:text-primary/80"
+                (click)="setLevel(null)"
+                [class.opacity-50]="!selectedLevel"
+              >
+                Réinitialiser
+              </button>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition"
+                [class.bg-primary]="!selectedLevel"
+                [class.text-white]="!selectedLevel"
+                [class.border-primary/40]="!selectedLevel"
+                [class.border-slate-200]="selectedLevel"
+                [class.text-slate-600]="selectedLevel"
+                (click)="setLevel(null)"
+              >
+                <i data-feather="grid" class="w-4 h-4"></i>
+                Tous
+              </button>
+              <button
+                *ngFor="let level of levels"
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition"
+                [class.bg-primary]="selectedLevel === level.id"
+                [class.text-white]="selectedLevel === level.id"
+                [class.border-primary/40]="selectedLevel === level.id"
+                [class.border-slate-200]="selectedLevel !== level.id"
+                [class.text-slate-600]="selectedLevel !== level.id"
+                (click)="setLevel(level.id)"
+              >
+                <i data-feather="bookmark" class="w-4 h-4"></i>
+                {{ level.name }}
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="subjects.length" class="mt-10">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold text-slate-900">Matières</h2>
+              <button
+                type="button"
+                class="text-sm text-primary hover:text-primary/80"
+                (click)="setSubject(null)"
+                [class.opacity-50]="!selectedSubject"
+              >
+                Réinitialiser
+              </button>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition"
+                [class.bg-primary]="!selectedSubject"
+                [class.text-white]="!selectedSubject"
+                [class.border-primary/40]="!selectedSubject"
+                [class.border-slate-200]="selectedSubject"
+                [class.text-slate-600]="selectedSubject"
+                (click)="setSubject(null)"
+              >
+                <i data-feather="book" class="w-4 h-4"></i>
+                Toutes
+              </button>
+              <button
+                *ngFor="let subject of subjects"
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition"
+                [class.bg-primary]="selectedSubject === subject"
+                [class.text-white]="selectedSubject === subject"
+                [class.border-primary/40]="selectedSubject === subject"
+                [class.border-slate-200]="selectedSubject !== subject"
+                [class.text-slate-600]="selectedSubject !== subject"
+                (click)="setSubject(subject)"
+              >
+                <i data-feather="tag" class="w-4 h-4"></i>
+                {{ subject }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-16 relative">
+    <!-- Additional school motifs in collection section -->
+    <div class="collection-school-motif collection-school-motif--book" style="top: 10%; right: 3%; animation-delay: 4s;" aria-hidden="true"></div>
+    <div class="collection-school-motif collection-school-motif--star" style="bottom: 15%; left: 3%; animation-delay: 5s;" aria-hidden="true"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,1.25fr)] gap-10 items-start">
+        <div class="overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 class="text-2xl font-semibold text-slate-900">Collection des manuels</h2>
+              <p class="text-sm text-slate-500 mt-1">
+                {{ filteredManuals.length }} manuel{{ filteredManuals.length > 1 ? 's' : '' }} affiché{{ filteredManuals.length > 1 ? 's' : '' }}
+              </p>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-slate-500">
+              <i data-feather="info" class="w-4 h-4"></i>
+              Cliquez sur un manuel pour voir ses détails.
+            </div>
+          </div>
+
+          <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div *ngFor="let skeleton of [1,2,3,4,5,6]" class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 animate-pulse">
+              <div class="aspect-[3/4] rounded-xl bg-slate-200"></div>
+              <div class="mt-4 space-y-3">
+                <div class="h-4 bg-slate-200 rounded"></div>
+                <div class="h-3 bg-slate-200 rounded w-1/2"></div>
+                <div class="flex gap-2">
+                  <span class="h-6 bg-slate-200 rounded w-16"></span>
+                  <span class="h-6 bg-slate-200 rounded w-12"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoading && filteredManuals.length === 0" class="empty-state-card">
+            <div class="empty-state-icon">
+              <i data-feather="book-open" class="w-10 h-10"></i>
+            </div>
+            <div class="empty-state-decor">
+              <i data-feather="search" class="w-6 h-6"></i>
+            </div>
+            <h3 class="empty-state-title">Aucun manuel trouvé</h3>
+            <p class="empty-state-text">
+              Essayez d'élargir votre recherche, de réinitialiser les filtres ou de parcourir les catégories proposées dans la colonne de droite.
+            </p>
+            <div class="mt-6">
+              <button
+                type="button"
+                (click)="setLevel(null); setSubject(null); handleSearchTermChange('');"
+                class="empty-state-button"
+              >
+                <i data-feather="refresh-ccw" class="w-4 h-4"></i>
+                Réinitialiser les filtres
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoading && filteredManuals.length" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <article
+              *ngFor="let manual of filteredManuals; trackBy: trackByManualId"
+              (click)="openManual(manual)"
+              class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition overflow-hidden cursor-pointer"
+            >
+              <div class="relative">
+                <img
+                  [src]="manual.image_url || 'https://via.placeholder.com/480x640?text=Manuel+EDIG'"
+                  [alt]="manual.title"
+                  class="w-full aspect-[3/4] object-cover border-b border-slate-100"
+                  loading="lazy"
+                />
+                <div *ngIf="manual.is_new" class="absolute top-4 left-4 inline-flex items-center gap-1 rounded-full bg-emerald-500 text-white text-xs font-semibold px-3 py-1 shadow">
+                  <i data-feather="sparkles" class="w-3 h-3"></i>
+                  Nouveau
+                </div>
+                <div *ngIf="manual.is_popular" class="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-amber-500 text-white text-xs font-semibold px-3 py-1 shadow">
+                  <i data-feather="trending-up" class="w-3 h-3"></i>
+                  Populaire
+                </div>
+              </div>
+
+              <div class="p-5 flex flex-col gap-4">
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-900 group-hover:text-primary transition">
+                    {{ manual.title }}
+                  </h3>
+                  <p class="mt-1 text-sm text-slate-500" *ngIf="manual.author">Par {{ manual.author }}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full bg-indigo-50 text-indigo-600">
+                    <i data-feather="bookmark" class="w-3 h-3"></i>
+                    {{ getLevelName(manual.level_id) }}
+                  </span>
+                  <span *ngIf="manual.subject" class="inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full bg-emerald-50 text-emerald-600">
+                    <i data-feather="tag" class="w-3 h-3"></i>
+                    {{ manual.subject }}
+                  </span>
+                </div>
+
+                <p *ngIf="manual.description" class="text-sm text-slate-600 line-clamp-3">
+                  {{ manual.description }}
+                </p>
+
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                  <span class="inline-flex items-center gap-1">
+                    <i data-feather="calendar" class="w-3 h-3"></i>
+                    {{ manual.created_at | date:'longDate':'':'fr-FR' }}
+                  </span>
+                  <button
+                    type="button"
+                    class="inline-flex items-center gap-1 text-primary hover:text-primary/80 font-medium"
+                    (click)="openManual(manual); $event.stopPropagation()"
+                  >
+                    Voir les détails
+                    <i data-feather="arrow-right" class="w-3 h-3"></i>
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+          <!-- Load more button to fetch more manuals if available -->
+          <div class="mt-6 text-center" *ngIf="manuals.length >= 48">
+            <button type="button" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-6 py-3" (click)="loadMoreManuals()">
+              <i data-feather="chevrons-down" class="w-4 h-4"></i>
+              Charger plus
+            </button>
+          </div>
+        </div>
+
+        <aside class="space-y-6">
+          <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-slate-900">Nouvelle sélection</h3>
+            <p class="mt-2 text-sm text-slate-500">Des ressources fraîchement ajoutées par les équipes pédagogiques.</p>
+
+            <ul class="mt-5 space-y-4">
+              <li
+                *ngFor="let manual of highlightedManuals; trackBy: trackByManualId"
+                class="flex gap-4"
+              >
+                <div class="flex-shrink-0 w-16 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+                  <img
+                    [src]="manual.image_url || 'https://via.placeholder.com/160x200?text=EDIG'"
+                    [alt]="manual.title"
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-slate-900 line-clamp-2">{{ manual.title }}</p>
+                  <p class="text-xs text-slate-500 mt-1" *ngIf="manual.author">{{ manual.author }}</p>
+                  <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-full bg-emerald-50 text-emerald-600">
+                    <i data-feather="sparkles" class="w-3 h-3"></i>
+                    Nouveau
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div id="populaires" class="bg-gradient-to-br from-indigo-600 via-primary to-purple-600 text-white rounded-3xl shadow-xl p-6">
+            <h3 class="text-lg font-semibold">Populaire auprès des enseignants</h3>
+            <p class="mt-2 text-sm text-white/80">Les manuels les plus consultés ces dernières semaines.</p>
+
+            <ul class="mt-5 space-y-4">
+              <li
+                *ngFor="let manual of popularManuals; trackBy: trackByManualId"
+                class="flex gap-4"
+              >
+                <div class="flex-shrink-0 w-14 h-[4.5rem] rounded-xl overflow-hidden bg-white/10 border border-white/20">
+                  <img
+                    [src]="manual.image_url || 'https://via.placeholder.com/150x180?text=EDIG'"
+                    [alt]="manual.title"
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-white line-clamp-2">{{ manual.title }}</p>
+                  <p class="text-xs text-white/80 mt-1" *ngIf="manual.subject">{{ manual.subject }}</p>
+                  <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-full bg-white/15 text-white">
+                    <i data-feather="trending-up" class="w-3 h-3"></i>
+                    Populaire
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-slate-900">Dernières consultations</h3>
+            <p class="mt-2 text-sm text-slate-500">Les ressources consultées récemment par les équipes.</p>
+
+            <ul class="mt-5 space-y-4">
+              <li
+                *ngFor="let manual of recentManuals; trackBy: trackByManualId"
+                class="flex items-start gap-4"
+              >
+                <div class="flex-shrink-0 w-14 h-[4.5rem] rounded-xl overflow-hidden bg-slate-100 border border-slate-100">
+                  <img
+                    [src]="manual.image_url || 'https://via.placeholder.com/150x180?text=EDIG'"
+                    [alt]="manual.title"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-slate-900 line-clamp-2">{{ manual.title }}</p>
+                  <p class="text-xs text-slate-500 mt-1" *ngIf="manual.author">{{ manual.author }}</p>
+                  <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-full bg-indigo-50 text-indigo-600">
+                    <i data-feather="clock" class="w-3 h-3"></i>
+                    {{ manual.created_at | date:'mediumDate':'':'fr-FR' }}
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <div class="mt-6 text-center">
+              <button
+                type="button"
+                class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80"
+                (click)="setSort('recent')"
+              >
+                Voir le flux complet
+                <i data-feather="arrow-right" class="w-3 h-3"></i>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <app-manual-details-modal
+    [manual]="selectedManual"
+    [isVisible]="isModalVisible"
+    (close)="closeModal()"
+  ></app-manual-details-modal>
+  </div>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">
+        <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+        <p>
+          EDIG · édicef — Institut Pédagogique National<br>
+          Votre partenaire pour l'éducation et les ressources pédagogiques de qualité.
+        </p>
+        <div class="site-footer__school-icons">
+          <div class="school-icon" title="Manuels scolaires">
+            <i data-feather="book" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div class="school-icon" title="Cahiers d'exercices">
+            <i data-feather="edit-3" class="w-5 h-5 text-sky-400"></i>
+          </div>
+          <div class="school-icon" title="Ressources numériques">
+            <i data-feather="monitor" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+          <div class="school-icon" title="Guides pédagogiques">
+            <i data-feather="compass" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="book-open" class="w-4 h-4"></i>
+          Navigation
+        </h3>
+        <div class="site-footer__links">
+          <a routerLink="/bibliotheque/collection">Collection complète</a>
+          <a routerLink="/bibliotheque/niveaux">Niveaux scolaires</a>
+          <a routerLink="/bibliotheque/nouveautes">Nouveautés</a>
+          <a routerLink="/bibliotheque/populaires">Populaires</a>
+          <a routerLink="/bibliotheque/a-propos">À propos</a>
+          <a routerLink="/bibliotheque/contact">Contacts</a>
+        </div>
+      </div>
+      
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="share-2" class="w-4 h-4"></i>
+          Suivez-nous
+        </h3>
+        <div class="site-footer__socials">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener">
+            <i data-feather="facebook" class="w-4 h-4"></i>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener">
+            <i data-feather="instagram" class="w-4 h-4"></i>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener">
+            <i data-feather="youtube" class="w-4 h-4"></i>
+            YouTube
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">
+            <i data-feather="twitter" class="w-4 h-4"></i>
+            Twitter
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-footer__bottom">
+      <p>&copy; {{ currentYear }} EDIG - Tous droits réservés | Institut Pédagogique National du Gabon</p>
+    </div>
+  </footer>
+</div>
+

@@ -1,0 +1,401 @@
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0" [class.hidden]="!isSidebarOpen">
+        <div class="flex flex-col w-64 bg-indigo-700 text-white">
+            <div class="flex items-center justify-center h-16 px-4 border-b border-indigo-600">
+                <div class="flex items-center">
+                    <i data-feather="shield" class="w-6 h-6 mr-2"></i>
+                    <span class="text-xl font-semibold">AdminPanel</span>
+                </div>
+            </div>
+            <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                <nav class="flex-1 space-y-2">
+                    <a routerLink="/admin/dashboard"
+                       (click)="setOverviewView()"
+                       class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-semibold text-white rounded-xl"
+                       [ngClass]="{ 'sidebar-link--active': activeView === 'overview' }">
+                        <i data-feather="home" class="sidebar-icon w-5 h-5"></i>
+                        Tableau de bord
+                    </a>
+                    <a (click)="goToManualsList()"
+                       class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-indigo-100 rounded-xl"
+                       [ngClass]="{ 'sidebar-link--active text-white': activeView === 'manuals' }">
+                        <i data-feather="book" class="sidebar-icon w-5 h-5"></i>
+                        Liste des manuels
+                    </a>
+                    <a (click)="goToUsers()" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-indigo-100 rounded-xl"
+                       [ngClass]="{ 'sidebar-link--active text-white': activeView === 'users' }">
+                        <i data-feather="users" class="sidebar-icon w-5 h-5"></i>
+                        Gérer les utilisateurs
+                    </a>
+                    <a (click)="goToSettings()" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-indigo-100 rounded-xl"
+                       [ngClass]="{ 'sidebar-link--active text-white': activeView === 'settings' }">
+                        <i data-feather="settings" class="sidebar-icon w-5 h-5"></i>
+                        Paramètres
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-indigo-600">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 rounded-full border-2 border-indigo-400 object-cover" 
+                         [src]="adminAvatar" 
+                         [alt]="adminName"
+                         onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=4F46E5&color=fff&size=128'">
+                    <div class="ml-3 flex-1 min-w-0">
+                        <p class="text-sm font-medium text-white truncate">{{ adminName }}</p>
+                        <p class="text-xs font-medium text-indigo-200 truncate">{{ adminEmail }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top navigation -->
+        <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
+            <div class="flex items-center gap-3 md:gap-4">
+                <button class="md:hidden text-gray-500 focus:outline-none hover:text-gray-700 transition-colors" (click)="toggleSidebar()">
+                    <i data-feather="menu" class="w-6 h-6"></i>
+                </button>
+                <div>
+                    <h1 class="text-base md:text-lg font-semibold text-gray-800">Tableau de bord</h1>
+                    <p class="hidden md:block text-xs text-gray-500">Aperçu des activités administrateur</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 md:gap-4">
+                <div class="hidden md:flex flex-col text-right leading-tight">
+                    <span class="text-sm font-semibold text-gray-800">{{ adminName }}</span>
+                    <span class="text-xs text-gray-500">
+                        {{ adminRole }}<span *ngIf="adminJobTitle"> · {{ adminJobTitle }}</span>
+                    </span>
+                </div>
+                <div class="hidden md:flex h-10 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-2 md:gap-3">
+                    <button class="btn-icon" title="Notifications">
+                        <i data-feather="bell" class="w-4 h-4"></i>
+                        <span class="btn-icon__badge" aria-hidden="true"></span>
+                </button>
+                    <button class="btn-icon" (click)="goToSettings()" title="Paramètres">
+                        <i data-feather="settings" class="w-4 h-4"></i>
+                </button>
+                </div>
+                <div class="hidden md:flex h-10 w-px bg-gray-200"></div>
+                <div class="relative" data-profile-menu>
+                    <button class="profile-button" 
+                            (click)="toggleProfileMenu(); $event.stopPropagation()">
+                        <img class="w-10 h-10 rounded-full border-2 border-indigo-100 object-cover" 
+                             [src]="adminAvatar" 
+                             [alt]="adminName"
+                             onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=4F46E5&color=fff&size=128'">
+                        <div class="hidden md:flex flex-col items-start">
+                            <span class="text-sm font-semibold text-gray-700">{{ adminName }}</span>
+                            <span class="text-xs text-gray-500 truncate max-w-[150px]">{{ adminEmail }}</span>
+                        </div>
+                        <i data-feather="chevron-down" class="w-4 h-4 text-gray-500 hidden md:block"></i>
+                    </button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div *ngIf="isProfileMenuOpen" 
+                         (click)="$event.stopPropagation()"
+                         class="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 py-2 animate-fade-in">
+                        <div class="px-5 py-4 border-b border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <img class="w-14 h-14 rounded-full border-2 border-indigo-500 object-cover" 
+                                     [src]="adminAvatar" 
+                                     [alt]="adminName"
+                                     onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=4F46E5&color=fff&size=128'">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ adminName }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ adminEmail }}</p>
+                                    <div class="mt-2 inline-flex flex-wrap items-center gap-2">
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-indigo-700 bg-indigo-50 rounded-full">
+                                            <i data-feather="shield" class="w-3.5 h-3.5"></i>
+                                            <span>{{ adminRole }}</span>
+                                        </span>
+                                        <span *ngIf="adminJobTitle" class="text-xs text-gray-500">{{ adminJobTitle }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-details-grid mt-4">
+                                <div *ngIf="adminOrganization" class="profile-detail-item">
+                                    <i data-feather="briefcase" class="w-4 h-4 text-indigo-500"></i>
+                                    <span>{{ adminOrganization }}</span>
+                                </div>
+                                <div *ngIf="adminPhone" class="profile-detail-item">
+                                    <i data-feather="phone" class="w-4 h-4 text-indigo-500"></i>
+                                    <span>{{ adminPhone }}</span>
+                                </div>
+                                <div *ngIf="adminLastSignIn" class="profile-detail-item profile-detail-item--column">
+                                    <i data-feather="clock" class="w-4 h-4 text-indigo-500"></i>
+                                    <div>
+                                        <span class="text-[0.7rem] uppercase tracking-wide text-gray-400">Dernière connexion</span>
+                                        <p class="text-xs font-semibold text-gray-700">{{ adminLastSignIn | date:'medium' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p *ngIf="adminBio" class="mt-4 text-xs text-gray-500 leading-relaxed">{{ adminBio }}</p>
+                        </div>
+                        
+                        <div class="py-2 flex flex-col gap-1">
+                            <button type="button"
+                               class="dropdown-link text-left"
+                               (click)="goToSettings()">
+                                <i data-feather="user" class="w-4 h-4 text-gray-500"></i>
+                                Mon profil
+                            </button>
+                            <button type="button"
+                               class="dropdown-link text-left"
+                               (click)="goToSettings()">
+                                <i data-feather="settings" class="w-4 h-4 text-gray-500"></i>
+                                Paramètres
+                            </button>
+                            <div class="border-t border-gray-200"></div>
+                            <button (click)="logout(); closeProfileMenu()" 
+                                    class="dropdown-link dropdown-link--danger w-full text-left">
+                                <i data-feather="log-out" class="w-4 h-4"></i>
+                                Déconnexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard content -->
+        <main class="dashboard-main flex-1 overflow-y-auto">
+            <div class="dashboard-container">
+                <ng-container [ngSwitch]="activeView">
+                    <ng-container *ngSwitchCase="'overview'">
+                        <section class="dashboard-hero">
+                            <div class="dashboard-hero__text">
+                                <p class="dashboard-hero__eyebrow">Administration</p>
+                                <h2 class="dashboard-hero__title">Bonjour {{ adminName }} 👋</h2>
+                                <p class="dashboard-hero__subtitle">Supervisez vos collections de manuels, vos utilisateurs et vos activités clés depuis un espace cohérent et moderne.</p>
+            </div>
+                            <div class="dashboard-hero__actions">
+                                <button (click)="navigateToAddBook()" class="primary-button">
+                                    <i data-feather="plus" class="w-4 h-4"></i>
+                                    <span>Ajouter un manuel</span>
+            </button>
+                </div>
+                        </section>
+
+                        <section class="dashboard-overview">
+                            <div class="section-header">
+                                <div>
+                                    <h3 class="section-title">Vue d'ensemble</h3>
+                                    <p class="section-subtitle">Suivi en direct des indicateurs clés</p>
+                </div>
+            </div>
+                            <div class="overview-grid">
+                                <article class="stat-card stat-card--primary">
+                                    <div class="stat-card__icon">
+                                        <i data-feather="layers" class="w-5 h-5"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <p class="stat-card__label">Total des manuels</p>
+                                        <p class="stat-card__value">{{ totalManuals }}</p>
+                                        <span class="stat-card__helper">Base de données complète</span>
+                                    </div>
+                                </article>
+                                <article class="stat-card stat-card--info">
+                                    <div class="stat-card__icon">
+                                        <i data-feather="clock" class="w-5 h-5"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <p class="stat-card__label">Temps moyen entre ajouts</p>
+                                        <p class="stat-card__value">{{ averageTimeBetweenAdditions }}</p>
+                                        <span class="stat-card__helper">Fréquence des nouvelles publications</span>
+                                    </div>
+                                </article>
+                                <article class="stat-card stat-card--surface" *ngIf="lastAddedManual">
+                                    <div class="stat-card__icon">
+                                        <i data-feather="bookmark" class="w-5 h-5"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <p class="stat-card__label">Dernier manuel ajouté</p>
+                                        <p class="stat-card__value stat-card__value--sm">{{ lastAddedManual?.title }}</p>
+                                        <span class="stat-card__helper">Ajouté le {{ lastAddedManual?.created_at | date:'mediumDate' }}</span>
+                                        <button (click)="viewLastAddedManualDetails()" class="link-button">
+                                            <i data-feather="eye" class="w-4 h-4"></i>
+                                            Voir les détails
+                                        </button>
+                                    </div>
+                                </article>
+                                <article class="stat-card stat-card--accent">
+                                    <div class="stat-card__icon">
+                                        <i data-feather="activity" class="w-5 h-5"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <p class="stat-card__label">Activités suivies</p>
+                                        <p class="stat-card__value">{{ recentActivities.length || 0 }}</p>
+                                        <span class="stat-card__helper">Dernières opérations enregistrées</span>
+                                    </div>
+                                </article>
+                            </div>
+                        </section>
+
+                        <section class="dashboard-insights">
+                            <article class="insight-card">
+                                <div class="insight-card__header">
+                                    <div>
+                                        <h3 class="insight-card__title">Répartition par niveau</h3>
+                                        <p class="insight-card__subtitle">Visualisez la distribution des manuels selon les niveaux scolaires.</p>
+                                    </div>
+                                    <span class="badge badge--outline">Actualisé</span>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="levelChart"></canvas>
+                    </div>
+                            </article>
+                            <article class="insight-card">
+                                <div class="insight-card__header">
+                                    <div>
+                                        <h3 class="insight-card__title">Connexions administrateurs</h3>
+                                        <p class="insight-card__subtitle">Connexions quotidiennes sur les 30&nbsp;derniers jours.</p>
+                                    </div>
+                                    <span class="badge badge--outline">30 jours</span>
+                                </div>
+                                <div class="chart-wrapper chart-wrapper--line">
+                                    <canvas id="userLoginChart"></canvas>
+                                </div>
+                            </article>
+                            <article class="insight-card insight-card--timeline">
+                                <div class="insight-card__header">
+                                    <div>
+                                        <h3 class="insight-card__title">Dernières activités</h3>
+                                        <p class="insight-card__subtitle">Actions administratives les plus récentes</p>
+                    </div>
+                </div>
+                                <ng-container *ngIf="(recentActivities | slice:0:6) as displayedActivities">
+                                    <div *ngIf="displayedActivities.length === 0" class="empty-state">
+                                        <i data-feather="calendar" class="w-5 h-5"></i>
+                                        <p>Aucune activité enregistrée récemment.</p>
+            </div>
+                                    <ul class="timeline" *ngIf="displayedActivities.length > 0">
+                                        <li class="timeline__item" *ngFor="let activity of displayedActivities">
+                                            <div class="timeline__indicator"
+                                                 [ngClass]="{
+                                                   'timeline__indicator--update': activity.message.includes('modifié'),
+                                                   'timeline__indicator--delete': activity.message.includes('supprimé'),
+                                                   'timeline__indicator--create': !activity.message.includes('modifié') && !activity.message.includes('supprimé')
+                                                 }">
+                                                <i [attr.data-feather]="activity.message.includes('modifié') ? 'edit' : activity.message.includes('supprimé') ? 'trash-2' : 'plus'" class="w-3.5 h-3.5"></i>
+                        </div>
+                                            <div class="timeline__content">
+                                                <p class="timeline__title">{{ activity.message }}</p>
+                                                <p class="timeline__time">{{ activity.created_at | date:'medium' }}</p>
+                    </div>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                            </article>
+                        </section>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'manuals'">
+                        <section class="dashboard-hero dashboard-hero--compact">
+                            <div class="dashboard-hero__text">
+                                <p class="dashboard-hero__eyebrow">Catalogue</p>
+                                <h2 class="dashboard-hero__title">Liste des manuels</h2>
+                                <p class="dashboard-hero__subtitle">Consultez et gérez vos ressources sans quitter le tableau de bord.</p>
+                </div>
+                            <div class="dashboard-hero__actions">
+                                <button (click)="setOverviewView()" class="ghost-button ghost-button--light">
+                                    <i data-feather="arrow-left" class="w-4 h-4"></i>
+                                    <span>Retour</span>
+                                </button>
+                                <button (click)="navigateToAddBook()" class="primary-button">
+                                    <i data-feather="plus" class="w-4 h-4"></i>
+                                    <span>Ajouter un manuel</span>
+                    </button>
+                        </div>
+                        </section>
+
+                        <section class="manuals-panel">
+                            <div class="manuals-panel__header">
+                                <div>
+                                    <h3 class="manuals-panel__title">Tous les manuels</h3>
+                                    <p class="manuals-panel__subtitle">Visualisez l'ensemble des ouvrages enregistrés et accédez rapidement aux actions clés.</p>
+                        </div>
+                    </div>
+
+                            <div *ngIf="manualsLoadError" class="manuals-panel__feedback manuals-panel__feedback--error">
+                                <i data-feather="alert-circle" class="w-5 h-5"></i>
+                                <span>{{ manualsLoadError }}</span>
+                </div>
+
+                            <div *ngIf="isManualsLoading" class="manuals-panel__feedback manuals-panel__feedback--loading">
+                                <div class="manuals-panel__spinner"></div>
+                                <p>Chargement des manuels en cours...</p>
+                            </div>
+
+                            <div *ngIf="!isManualsLoading && !manualsLoadError && allManuals.length === 0" class="manuals-panel__empty">
+                                <i data-feather="inbox" class="w-6 h-6"></i>
+                                <p>Aucun manuel n'est enregistré pour le moment.</p>
+                                <button (click)="navigateToAddBook()" class="primary-button">
+                                    <i data-feather="plus" class="w-4 h-4"></i>
+                                    <span>Ajouter un manuel</span>
+                                </button>
+                            </div>
+
+                            <div *ngIf="!isManualsLoading && allManuals.length > 0" class="manuals-grid">
+                                <article class="manual-card" *ngFor="let manual of allManuals">
+                                    <div class="manual-card__media">
+                                        <img [src]="manual.image_url || 'https://via.placeholder.com/640x360?text=Manuel'" [alt]="manual.title" loading="lazy">
+                                    </div>
+                                    <div class="manual-card__body">
+                                        <h4 class="manual-card__title">{{ manual.title }}</h4>
+                                        <p class="manual-card__meta">
+                                            <i data-feather="user" class="w-4 h-4"></i>
+                                            <span>{{ manual.author || 'Auteur inconnu' }}</span>
+                                        </p>
+                                        <p class="manual-card__meta">
+                                            <i data-feather="bookmark" class="w-4 h-4"></i>
+                                            <span>Niveau : {{ manual.level_id || 'Non spécifié' }}</span>
+                                        </p>
+                                        <p class="manual-card__meta">
+                                            <i data-feather="calendar" class="w-4 h-4"></i>
+                                            <span>Ajouté le {{ manual.created_at | date:'mediumDate' }}</span>
+                                        </p>
+                                        <div class="manual-card__actions">
+                                            <button type="button" class="manual-card__action manual-card__action--view" (click)="openManualFromList(manual)">
+                                                <i data-feather="eye" class="w-4 h-4"></i>
+                                                Voir
+                                            </button>
+                                        <button type="button" class="manual-card__action manual-card__action--edit" (click)="showEditManualForm(manual)">
+                                            <i data-feather="edit" class="w-4 h-4"></i>
+                                            Modifier
+                                        </button>
+                                            <button type="button" class="manual-card__action manual-card__action--danger" (click)="deleteManual(manual)">
+                                                <i data-feather="trash-2" class="w-4 h-4"></i>
+                                                Supprimer
+                                            </button>
+                        </div>
+                    </div>
+                                </article>
+            </div>
+                        </section>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'users'">
+                        <app-users class="dashboard-users"></app-users>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'settings'">
+                        <app-settings class="dashboard-settings" [mode]="'embedded'"></app-settings>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'addManual'">
+                        <app-add-book class="dashboard-add-manual"
+                                      [showBackButton]="true"
+                                      [manualRecord]="editingManual"
+                                      (cancel)="handleManualFormCancel()"
+                                      (submitted)="handleManualFormSubmit($event)"></app-add-book>
+                    </ng-container>
+                </ng-container>
+        </div>
+</main>
+
+<app-manual-details-modal [manual]="selectedManual" [isVisible]="isModalVisible" (close)="closeModal()"></app-manual-details-modal>

@@ -1,0 +1,187 @@
+<div class="levels-shell">
+  <!-- Fond de quadrillage pour toute la page -->
+  <div class="levels-shell__grid-background" aria-hidden="true"></div>
+  
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+      <nav class="site-nav">
+      <a class="site-nav__link" routerLink="/bibliotheque/collection">Catalogue</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/niveaux">Niveaux</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/nouveautes">Nouveautés</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/populaires">Populaires</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/a-propos">À propos</a>
+        <a class="site-nav__link" routerLink="/bibliotheque/contact">Contacts</a>
+      </nav>
+      <div class="site-actions">
+        <ng-container *ngIf="user; else noUser">
+          <div class="site-profile" (click)="$event.stopPropagation(); toggleProfileMenu()" tabindex="0" role="button" aria-haspopup="true" [attr.aria-expanded]="showProfileMenu">
+            <img
+              class="site-profile__avatar"
+              [src]="userAvatar"
+              [alt]="userName"
+              onerror="this.src='https://ui-avatars.com/api/?name='+encodeURIComponent(this.alt)+'&background=6366f1&color=fff&size=128'"
+            />
+            <div class="site-profile__info">
+              <span class="site-profile__name">{{ userName }}</span>
+            </div>
+
+            <div *ngIf="showProfileMenu" class="profile-menu" (click)="$event.stopPropagation()">
+              <div class="profile-menu__header">
+                <div class="profile-menu__avatar-wrap">
+                  <img [src]="userAvatar" [alt]="userName" class="profile-menu__avatar" />
+                </div>
+                <div class="profile-menu__meta">
+                  <div class="profile-menu__name">{{ userName }}</div>
+                  <div class="profile-menu__email">{{ userEmail }}</div>
+                </div>
+              </div>
+              <ul class="profile-menu__list">
+                <li>
+                  <a class="profile-menu__link" (click)="goToAccount()">
+                    <i data-feather="user" class="w-4 h-4" aria-hidden="true"></i>
+                    Mon compte
+                  </a>
+                </li>
+                <li>
+                  <button type="button" class="profile-menu__logout" (click)="logout()">
+                    <i data-feather="log-out" class="w-4 h-4" aria-hidden="true"></i>
+                    Se déconnecter
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noUser>
+          <a routerLink="/login" class="site-actions__link">Se connecter</a>
+          <a routerLink="/inscription" class="site-actions__cta">S'inscrire</a>
+        </ng-template>
+      </div>
+    </div>
+  </header>
+  <header class="levels-hero">
+    <div class="levels-hero__inner">
+      <div class="levels-hero__content">
+        <span class="levels-badge">Nos cycles scolaires</span>
+        <h1>
+          Construisez les parcours de vos élèves  Primaire, Collège et Lycée 
+          avec les manuels EDIG
+        </h1>
+        <p>
+          Nos collections sont conformes aux programmes gabonais et co‑élaborées avec des enseignants.
+          Elles sont enrichies de ressources numériques pour accompagner l'apprentissage en classe
+          comme à la maison.
+        </p>
+        <a routerLink="/bibliotheque/collection" class="levels-cta" aria-label="Accéder au catalogue">
+          Accéder au catalogue
+        </a>
+      </div>
+      <div class="levels-hero__visual">
+        <div class="levels-hero__decor levels-hero__decor--ruler" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--pen" aria-hidden="true"></div>
+        <div class="levels-hero__decor levels-hero__decor--pencil" aria-hidden="true"></div>
+        <div class="levels-hero__circle levels-hero__circle--primaire">Primaire</div>
+        <div class="levels-hero__circle levels-hero__circle--college">Collège</div>
+        <div class="levels-hero__circle levels-hero__circle--lycee">Lycée</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="levels-grid">
+    <article *ngFor="let level of levelDetails" class="level-card" [ngClass]="level.gradientClass">
+      <header class="level-card__header">
+        <h2>{{ level.cycle }}</h2>
+        <p>{{ level.description }}</p>
+      </header>
+      <ul class="level-card__list">
+        <li *ngFor="let point of level.highlights">{{ point }}</li>
+      </ul>
+  <a routerLink="/bibliotheque/collection" class="level-card__cta">{{ level.cta }}</a>
+    </article>
+  </section>
+
+  <section class="levels-support">
+    <div class="levels-support__inner">
+      <h2>Un accompagnement complet pour vos équipes pédagogiques</h2>
+      <p>
+        Notre équipe déploie les manuels EDIG dans les établissements et propose un suivi personnalisé pour assurer
+        une mise en œuvre sereine dans les classes.
+      </p>
+      <div class="levels-support__grid">
+        <article *ngFor="let item of supportCards" class="support-card">
+          <div class="support-card__icon">{{ item.icon }}</div>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">
+        <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+        <p>
+          EDIG · édicef — Institut Pédagogique National<br>
+          Votre partenaire pour l'éducation et les ressources pédagogiques de qualité.
+        </p>
+        <div class="site-footer__school-icons">
+          <div class="school-icon" title="Manuels scolaires">
+            <i data-feather="book" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <div class="school-icon" title="Cahiers d'exercices">
+            <i data-feather="edit-3" class="w-5 h-5 text-sky-400"></i>
+          </div>
+          <div class="school-icon" title="Ressources numériques">
+            <i data-feather="monitor" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+          <div class="school-icon" title="Guides pédagogiques">
+            <i data-feather="compass" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+      </div>
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="book-open" class="w-4 h-4"></i>
+          Navigation
+        </h3>
+        <div class="site-footer__links">
+          <a routerLink="/bibliotheque/collection">Collection complète</a>
+          <a routerLink="/bibliotheque/niveaux">Niveaux scolaires</a>
+          <a routerLink="/bibliotheque/nouveautes">Nouveautés</a>
+          <a routerLink="/bibliotheque/populaires">Populaires</a>
+          <a routerLink="/bibliotheque/a-propos">À propos</a>
+          <a routerLink="/bibliotheque/contact">Contacts</a>
+        </div>
+      </div>
+      <div class="site-footer__section">
+        <h3 class="site-footer__section-title">
+          <i data-feather="share-2" class="w-4 h-4"></i>
+          Suivez-nous
+        </h3>
+        <div class="site-footer__socials">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener">
+            <i data-feather="facebook" class="w-4 h-4"></i>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com" target="_blank" rel="noopener">
+            <i data-feather="instagram" class="w-4 h-4"></i>
+            Instagram
+          </a>
+          <a href="https://www.youtube.com" target="_blank" rel="noopener">
+            <i data-feather="youtube" class="w-4 h-4"></i>
+            YouTube
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">
+            <i data-feather="twitter" class="w-4 h-4"></i>
+            Twitter
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <p>&copy; {{ currentYear }} EDIG - Tous droits réservés | Institut Pédagogique National du Gabon</p>
+    </div>
+  </footer>
+</div>

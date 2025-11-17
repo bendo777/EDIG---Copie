@@ -1,0 +1,54 @@
+<div class="account-shell">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" routerLink="/bibliotheque">EDIG</a>
+      <nav class="site-nav">
+        <a class="site-nav__link" *ngFor="let link of navLinks" [routerLink]="link.route">{{ link.label }}</a>
+      </nav>
+      <div class="site-actions">
+        <button type="button" class="site-actions__link" (click)="navigateToCatalog()">Retour au catalogue</button>
+        <button type="button" class="site-actions__cta" (click)="logout()">Se déconnecter</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="account-main">
+    <ng-container *ngIf="!loading; else loadingState">
+      <section class="account-card" *ngIf="user; else noUser">
+        <div class="account-card__header">
+          <img class="account-card__avatar" [src]="userAvatar" [alt]="userName" />
+          <div>
+            <p class="account-card__eyebrow">Mon compte</p>
+            <h1>{{ userName || 'Utilisateur' }}</h1>
+            <p class="account-card__email">{{ userEmail || 'Adresse e-mail non renseignée' }}</p>
+          </div>
+          <button type="button" class="account-card__logout" (click)="logout()">Se déconnecter</button>
+        </div>
+
+        <div class="account-card__details">
+          <article class="account-detail" *ngFor="let detail of profileDetails">
+            <span class="account-detail__label">{{ detail.label }}</span>
+            <span class="account-detail__value">{{ detail.value || '—' }}</span>
+          </article>
+        </div>
+      </section>
+
+      <ng-template #noUser>
+        <section class="account-card account-card--empty">
+          <h2>Session expirée</h2>
+          <p>Veuillez vous reconnecter pour consulter vos informations personnelles.</p>
+          <button type="button" class="site-actions__cta" routerLink="/login">Se connecter</button>
+        </section>
+      </ng-template>
+    </ng-container>
+  </main>
+</div>
+
+<ng-template #loadingState>
+  <div class="account-loading">
+    <div class="account-loading__spinner"></div>
+    <p>Chargement de vos informations…</p>
+  </div>
+</ng-template>
+
+

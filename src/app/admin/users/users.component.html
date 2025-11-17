@@ -1,0 +1,205 @@
+<div class="users-page">
+  <section class="users-hero">
+    <div class="users-hero__text">
+      <p class="users-hero__eyebrow">Gestion des accès</p>
+      <h1 class="users-hero__title">Utilisateurs &amp; rôles</h1>
+      <p class="users-hero__subtitle">
+        Suivez l'activité des administrateurs, modérez les rôles et invitez de nouveaux collaborateurs
+        au sein de la plateforme.
+      </p>
+    </div>
+    <div class="users-hero__metrics">
+      <article class="users-metric" aria-label="Total des utilisateurs">
+        <span class="users-metric__label">Total</span>
+        <span class="users-metric__value">{{ totalUsers }}</span>
+        <span class="users-metric__helper">Comptes référencés</span>
+      </article>
+      <article class="users-metric" aria-label="Utilisateurs actifs">
+        <span class="users-metric__label">Actifs</span>
+        <span class="users-metric__value">{{ activeUsers }}</span>
+        <span class="users-metric__helper">Connexions récentes</span>
+      </article>
+      <article class="users-metric" aria-label="Invitations en attente">
+        <span class="users-metric__label">Invitations</span>
+        <span class="users-metric__value">{{ invitedUsers }}</span>
+        <span class="users-metric__helper">En attente de validation</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="users-panel">
+    <header class="users-panel__toolbar">
+      <div class="users-search">
+        <i data-feather="search"></i>
+        <input
+          type="search"
+          placeholder="Rechercher par nom, email, organisation..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          aria-label="Rechercher un utilisateur"
+        />
+      </div>
+
+      <div class="users-filters">
+        <label class="users-filter">
+          <span>Rôle</span>
+          <div class="users-filter__select">
+            <select [(ngModel)]="selectedRole" (change)="onRoleFilterChange(selectedRole)">
+              <option value="all">Tous</option>
+              <option value="admin">Administrateur</option>
+              <option value="user">Utilisateur</option>
+            </select>
+            <i data-feather="chevron-down"></i>
+          </div>
+        </label>
+
+        <label class="users-filter">
+          <span>Statut</span>
+          <div class="users-filter__select">
+            <select [(ngModel)]="selectedStatus" (change)="onStatusFilterChange(selectedStatus)">
+              <option value="all">Tous</option>
+              <option value="active">Actifs</option>
+              <option value="inactive">Inactifs</option>
+              <option value="invited">Invitations</option>
+            </select>
+            <i data-feather="chevron-down"></i>
+          </div>
+        </label>
+      </div>
+
+      <button type="button" class="users-refresh" (click)="refresh()">
+        <i data-feather="refresh-ccw"></i>
+        Actualiser
+      </button>
+    </header>
+
+    <div class="users-stats">
+      <div class="users-stat-card" *ngFor="let role of rolesSummary">
+        <span class="users-stat-card__label">{{ role.label }}</span>
+        <span class="users-stat-card__value">{{ role.value }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="users-state users-state--loading">
+      <div class="users-spinner"></div>
+      <p>Chargement des utilisateurs…</p>
+    </div>
+
+    <div *ngIf="error" class="users-state users-state--error">
+      <i data-feather="alert-triangle"></i>
+      <p>{{ error }}</p>
+      <button type="button" (click)="refresh()">Réessayer</button>
+    </div>
+
+    <div *ngIf="!isLoading && !error && filteredUsers.length === 0" class="users-state users-state--empty">
+      <i data-feather="users"></i>
+      <p>Aucun utilisateur ne correspond à votre recherche.</p>
+      <button type="button" (click)="refresh()">Tout afficher</button>
+    </div>
+
+    <div *ngIf="!isLoading && !error && filteredUsers.length > 0" class="users-table" role="table">
+      <div class="users-table__header" role="row">
+        <span class="users-table__cell">Utilisateur</span>
+        <span class="users-table__cell">Organisation</span>
+        <span class="users-table__cell">Rôle</span>
+        <span class="users-table__cell">Statut</span>
+        <span class="users-table__cell users-table__cell--right">Dernière connexion</span>
+      </div>
+
+      <div class="users-table__body">
+        <button
+          type="button"
+          class="users-table__row"
+          *ngFor="let user of filteredUsers; trackBy: trackByUserId"
+          (click)="selectUser(user)"
+        >
+          <span class="users-table__cell users-table__cell--identity">
+            <span class="users-avatar" [class.users-avatar--placeholder]="!user.avatar_url">
+              <img *ngIf="user.avatar_url" [src]="user.avatar_url" [alt]="user.full_name" />
+              <span *ngIf="!user.avatar_url">{{ user.initials }}</span>
+            </span>
+            <span class="users-identity">
+              <span class="users-identity__name">{{ user.full_name }}</span>
+              <span class="users-identity__email">{{ user.email || 'Email non renseigné' }}</span>
+            </span>
+          </span>
+
+          <span class="users-table__cell users-table__cell--ellipsis">
+            {{ user.organization || '—' }}
+          </span>
+
+          <span class="users-table__cell">
+            <span class="users-role-tag">{{ user.roleLabel }}</span>
+          </span>
+
+          <span class="users-table__cell">
+            <span class="users-status" [class.users-status--active]="user.statusLevel === 'active'"
+              [class.users-status--inactive]="user.statusLevel === 'inactive'"
+              [class.users-status--invited]="user.statusLevel === 'invited'">
+              <i data-feather="activity"></i>
+              {{ user.statusLabel }}
+            </span>
+          </span>
+
+          <span class="users-table__cell users-table__cell--right">
+            {{ user.last_sign_in_at ? (user.last_sign_in_at | date: 'medium') : 'Jamais' }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="users-details" [class.users-details--open]="isDetailsOpen">
+    <div class="users-details__overlay" (click)="closeDetails()" *ngIf="isDetailsOpen"></div>
+    <aside class="users-details__panel" [class.users-details__panel--open]="isDetailsOpen">
+      <button type="button" class="users-details__close" (click)="closeDetails()">
+        <i data-feather="x"></i>
+      </button>
+
+      <ng-container *ngIf="selectedUser as user; else emptyDetail">
+        <div class="users-details__header">
+          <span class="users-details__avatar" [class.users-avatar--placeholder]="!user.avatar_url">
+            <img *ngIf="user.avatar_url" [src]="user.avatar_url" [alt]="user.full_name" />
+            <span *ngIf="!user.avatar_url">{{ user.initials }}</span>
+          </span>
+          <div>
+            <h2>{{ user.full_name }}</h2>
+            <p>{{ user.email || 'Email non renseigné' }}</p>
+          </div>
+        </div>
+
+        <div class="users-details__section">
+          <h3>Informations principales</h3>
+          <ul>
+            <li><span>Rôle</span><strong>{{ user.roleLabel }}</strong></li>
+            <li><span>Organisation</span><strong>{{ user.organization || 'Non renseignée' }}</strong></li>
+            <li><span>Téléphone</span><strong>{{ user.phone || 'Non renseigné' }}</strong></li>
+            <li><span>Statut</span>
+              <strong class="users-status"
+                      [class.users-status--active]="user.statusLevel === 'active'"
+                      [class.users-status--inactive]="user.statusLevel === 'inactive'"
+                      [class.users-status--invited]="user.statusLevel === 'invited'">
+                {{ user.statusLabel }}
+              </strong>
+            </li>
+          </ul>
+        </div>
+
+        <div class="users-details__section">
+          <h3>Historique</h3>
+          <ul>
+            <li><span>Créé le</span><strong>{{ user.created_at ? (user.created_at | date:'medium') : '—' }}</strong></li>
+            <li><span>Dernière connexion</span><strong>{{ user.last_sign_in_at ? (user.last_sign_in_at | date:'medium') : 'Jamais' }}</strong></li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <ng-template #emptyDetail>
+        <div class="users-details__empty">
+          <i data-feather="users"></i>
+          <p>Sélectionnez un utilisateur pour afficher les détails.</p>
+        </div>
+      </ng-template>
+    </aside>
+  </div>
+</div>

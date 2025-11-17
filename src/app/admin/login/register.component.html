@@ -1,0 +1,75 @@
+<div class="login-shell">
+  <div class="login-panel">
+    <div class="login-header">
+      <span class="login-logo">EDIG</span>
+      <h1>Rejoignez la plateforme EDIG</h1>
+      <p>Créez votre compte pour accéder à tous nos manuels scolaires et ressources pédagogiques.</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="register()">
+      <label class="login-field">
+        <span>Nom complet</span>
+        <input
+          type="text"
+          name="fullName"
+          [(ngModel)]="fullName"
+          placeholder="Prénom Nom"
+          required
+          autocomplete="name"
+        />
+      </label>
+
+      <label class="login-field">
+        <span>Email</span>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="votre.email@example.com"
+          required
+          autocomplete="email"
+        />
+      </label>
+
+      <label class="login-field">
+        <span>Mot de passe</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Minimum 8 caractères"
+          required
+          autocomplete="new-password"
+        />
+      </label>
+
+      <label class="login-field">
+        <span>Confirmer le mot de passe</span>
+        <input
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          placeholder="Répétez votre mot de passe"
+          required
+          autocomplete="new-password"
+        />
+      </label>
+
+      <button class="login-submit" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">S'inscrire</span>
+        <span *ngIf="loading" class="login-spinner">
+          <span class="login-spinner__dot"></span>
+          Inscription…
+        </span>
+      </button>
+
+      <p *ngIf="errorMsg" class="login-alert">{{ errorMsg }}</p>
+      <p *ngIf="successMsg" class="login-alert" style="background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(16, 185, 129, 0.24);">{{ successMsg }}</p>
+    </form>
+
+    <div class="login-links">
+      <a routerLink="/login">Retour à la connexion</a>
+      <a routerLink="/bibliotheque">Continuer sur la bibliothèque</a>
+    </div>
+  </div>
+</div>
