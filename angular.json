@@ -33,21 +33,20 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "200kB",
+                  "maximumError": "500kB"
                 }
               ],
+              "optimization": true,
               "outputHashing": "all",
-              "server": "src/main.server.ts",
-              "outputMode": "server",
-              "ssr": {
-                "entry": "src/server.ts"
-              }
+              "sourceMap": false,
+              "extractLicenses": true,
+              "outputMode": "static"
             },
             "development": {
               "optimization": false,

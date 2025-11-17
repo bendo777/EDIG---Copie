@@ -2,12 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/EDIG/**",
-      "use": "@vercel/static"
+      "src": "package.json",
+      "use": "@vercel/static-build"
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
 
