@@ -3,9 +3,38 @@
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+  background: linear-gradient(135deg, #f5f5dc 0%, #f0f8ff 25%, #e6f3ff 50%, #f5f5dc 75%, #fffef0 100%);
   background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  animation: gradientShift 20s ease infinite;
+}
+
+/* Effet de cahier avec lignes et marges */
+:host::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    /* Lignes horizontales du cahier */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(200, 200, 200, 0.3) 39px,
+      rgba(200, 200, 200, 0.3) 40px
+    ),
+    /* Marge rouge à gauche */
+    linear-gradient(
+      90deg,
+      rgba(220, 38, 38, 0.15) 0%,
+      rgba(220, 38, 38, 0.15) 3%,
+      transparent 3%,
+      transparent 100%
+    );
+  pointer-events: none;
+  z-index: 0;
 }
 
 @keyframes gradientShift {
@@ -20,28 +49,6 @@
   }
 }
 
-:host::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: patternMove 20s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes patternMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}
-
 :host::after {
   content: '';
   position: absolute;
@@ -50,11 +57,12 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.2) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(135, 206, 250, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(176, 224, 230, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(230, 230, 250, 0.15) 0%, transparent 50%);
   pointer-events: none;
   animation: float 20s ease-in-out infinite;
+  z-index: 0;
 }
 
 @keyframes float {
@@ -63,6 +71,309 @@
   }
   50% {
     transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* Éléments décoratifs scolaires */
+.school-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Livres */
+.school-book {
+  position: absolute;
+  width: 60px;
+  height: 45px;
+  background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+  border-radius: 4px 8px 8px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0.6;
+}
+
+.book-1 {
+  top: 15%;
+  left: 10%;
+  transform: rotate(-15deg);
+  animation: bookFloat 8s ease-in-out infinite;
+}
+
+.book-2 {
+  top: 20%;
+  right: 15%;
+  transform: rotate(20deg);
+  animation: bookFloat 10s ease-in-out infinite 2s;
+}
+
+@keyframes bookFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-15deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(-12deg);
+  }
+}
+
+/* Crayons */
+.school-pencil {
+  position: absolute;
+  width: 4px;
+  height: 80px;
+  background: linear-gradient(180deg, #ffd700 0%, #ffa500 50%, #8b4513 50%, #654321 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.7;
+}
+
+.pencil-1 {
+  top: 60%;
+  left: 8%;
+  transform: rotate(25deg);
+  animation: pencilRotate 12s ease-in-out infinite;
+}
+
+.pencil-2 {
+  top: 70%;
+  right: 12%;
+  transform: rotate(-30deg);
+  animation: pencilRotate 14s ease-in-out infinite 3s;
+}
+
+@keyframes pencilRotate {
+  0%, 100% {
+    transform: rotate(25deg) translateY(0);
+  }
+  50% {
+    transform: rotate(30deg) translateY(-10px);
+  }
+}
+
+/* Règles */
+.school-ruler {
+  position: absolute;
+  width: 120px;
+  height: 10px;
+  background: linear-gradient(90deg, #f0e68c 0%, #fffacd 50%, #f0e68c 100%);
+  border: 1px solid #d4af37;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.7;
+}
+
+.ruler-1 {
+  top: 25%;
+  left: 5%;
+  transform: rotate(35deg);
+  animation: rulerMove 15s ease-in-out infinite;
+}
+
+.ruler-2 {
+  top: 55%;
+  right: 8%;
+  transform: rotate(-50deg);
+  animation: rulerMove 18s ease-in-out infinite 2s;
+}
+
+.ruler-3 {
+  top: 75%;
+  left: 12%;
+  transform: rotate(60deg);
+  animation: rulerMove 16s ease-in-out infinite 4s;
+}
+
+@keyframes rulerMove {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(10px) translateY(-8px);
+  }
+}
+
+/* Globe terrestre */
+.school-globe {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4169e1 0%, #1e90ff 50%, #00bfff 100%);
+  box-shadow: 
+    inset -10px -10px 0 rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0.5;
+}
+
+.globe-1 {
+  top: 25%;
+  right: 8%;
+  animation: globeSpin 20s linear infinite;
+}
+
+.globe-1::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+}
+
+@keyframes globeSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Compas */
+.school-compass {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  opacity: 0.7;
+}
+
+.compass-1 {
+  top: 35%;
+  left: 8%;
+  animation: compassMove 12s ease-in-out infinite;
+}
+
+.compass-2 {
+  top: 65%;
+  right: 10%;
+  animation: compassMove 14s ease-in-out infinite 3s;
+}
+
+.school-compass::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid #4169e1;
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.school-compass::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 20px solid #4169e1;
+}
+
+@keyframes compassMove {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(15deg);
+  }
+}
+
+/* Triangles de géométrie */
+.school-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0.6;
+}
+
+.triangle-1 {
+  top: 45%;
+  left: 15%;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 40px solid #4a90e2;
+  animation: triangleFloat 10s ease-in-out infinite;
+}
+
+.triangle-2 {
+  top: 80%;
+  right: 15%;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 35px solid #5ba3f5;
+  animation: triangleFloat2 12s ease-in-out infinite 2s;
+}
+
+@keyframes triangleFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(10deg);
+  }
+}
+
+@keyframes triangleFloat2 {
+  0%, 100% {
+    transform: translateY(0) rotate(120deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(130deg);
+  }
+}
+
+/* Rapporteur */
+.school-protractor {
+  position: absolute;
+  width: 60px;
+  height: 30px;
+  border: 3px solid #ff6b6b;
+  border-top: none;
+  border-radius: 60px 60px 0 0;
+  opacity: 0.6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.protractor-1 {
+  top: 50%;
+  right: 5%;
+  animation: protractorRotate 16s ease-in-out infinite;
+}
+
+.protractor-1::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 25px;
+  background: #ff6b6b;
+  border-radius: 1px;
+}
+
+@keyframes protractorRotate {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(15deg) translateY(-8px);
   }
 }
 
@@ -82,8 +393,11 @@
   border-radius: 1.75rem;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  box-shadow: 0 35px 80px -40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 35px 80px -40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(65, 105, 225, 0.2);
   display: grid;
   gap: 1.8rem;
   position: relative;
@@ -100,14 +414,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6366f1, #818cf8);
+  background: linear-gradient(135deg, #4169e1, #5ba3f5);
   color: #fff;
   font-weight: 700;
   letter-spacing: 0.08em;
   margin: 0 auto;
+  box-shadow: 0 8px 16px rgba(65, 105, 225, 0.4);
+  font-size: 1.1rem;
 }
 
 .login-header h1 {
@@ -148,8 +464,8 @@
 }
 
 .login-field input:focus {
-  border-color: rgba(99, 102, 241, 0.65);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  border-color: rgba(65, 105, 225, 0.65);
+  box-shadow: 0 0 0 4px rgba(65, 105, 225, 0.15);
   outline: none;
 }
 
@@ -161,19 +477,20 @@
   gap: 0.65rem;
   padding: 0.85rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, #4f46e5, #6366f1);
+  background: linear-gradient(120deg, #4169e1, #5ba3f5);
   color: #fff;
   font-weight: 600;
   font-size: 0.95rem;
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 20px 35px -22px rgba(79, 70, 229, 0.45);
+  box-shadow: 0 20px 35px -22px rgba(65, 105, 225, 0.5);
 }
 
 .login-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 24px 46px -24px rgba(79, 70, 229, 0.55);
+  box-shadow: 0 24px 46px -24px rgba(65, 105, 225, 0.6);
+  background: linear-gradient(120deg, #5ba3f5, #6bb6ff);
 }
 
 .login-submit:disabled {
@@ -224,14 +541,14 @@
 }
 
 .login-links a {
-  color: #4f46e5;
+  color: #4169e1;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .login-links a:hover {
-  color: #4338ca;
+  color: #5ba3f5;
 }
 
 /* Button style for inscription within login links */
@@ -241,17 +558,17 @@
   justify-content: center;
   padding: 0.6rem 1rem;
   border-radius: 999px;
-  background: rgba(99, 102, 241, 0.06);
-  color: #4f46e5;
+  background: rgba(65, 105, 225, 0.1);
+  color: #4169e1;
   font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid rgba(79, 70, 229, 0.25);
+  border: 1px solid rgba(65, 105, 225, 0.3);
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .login-register-btn:hover {
-  background: rgba(99, 102, 241, 0.12);
-  color: #4338ca;
-  box-shadow: 0 10px 22px -14px rgba(79, 70, 229, 0.35);
+  background: rgba(65, 105, 225, 0.15);
+  color: #5ba3f5;
+  box-shadow: 0 10px 22px -14px rgba(65, 105, 225, 0.4);
 }
